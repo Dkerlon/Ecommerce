@@ -2,50 +2,27 @@
     <div class="register-container">
         <header>
             <img style="width: 100px;" src="/img/icons/loja.png" alt="icone de lojaa">
-            <h2>Criar Conta</h2>
-            <p>Junte-se ao nosso marketplace</p>
+            <h2>Bem-vindo de volta</h2>
+            <p>Entre na sua conta para continuar</p>
         </header>
         <main-container class="form-container">
-          <form @submit.prevent="createAccount">
-              <h3>Cadastro</h3>
-              <p>Preencha aas informações para criar sua conta</p>
-              <label-input-column id="nome-completo" label-text="Nome Completo" placeHolder="Seu nome completo" v-model="nome"></label-input-column>
-              <p v-if="formSubmitted && !isFormValid" class="formInvalid">Por favor insira as informações corretamente</p>
-              <label-input-column id="email" label-text="E-mail" placeHolder="Seu@email.com" type="'email'" v-model="email"></label-input-column>
+          <form @submit.prevent="LoginAccount">
+              <h3>Entrar</h3>
+              <p>Digite suas credenciais para acessar sua conta</p>
+              <label-input-column id="email" label-text="E-mail" placeHolder="seu@email.com" type="'email'" v-model="email"></label-input-column>
               <p v-if="formSubmitted && !isFormValid" class="formInvalid">Por favor insira as informações corretamente</p>
               <label for="password">Senha</label>
               <div class="container-input-img">
                 <input type="password" name="password" id="password" placeholder="Digite uma senha segura" v-model="password"/>
                 <img src="/img/icons/view-on.png" alt="">
               </div>
-              <p v-if="formSubmitted && !passwordIsEqual" class="formInvalid">As senhas devem ser iguais.</p>
-              <label for="confirm-password">Confirmar senha</label>
-              <div class="container-input-img">
-                <input type="confirm-password" name="confirm-password" id="confirm-password" placeholder="Confirme a senha" v-model="confirmPassword"/>
-                <img src="/img/icons/view-on.png" alt="">
-              </div>
-              <p v-if="formSubmitted && !passwordIsEqual" class="formInvalid">As senhas devem ser iguais.</p>
-              <label for="">Tipo de conta</label>
-              <div class="type-accout">
-                <label class="type">
-                  <input type="radio" name="type-accout" id="radio-comprador" value="comprador" v-model="typeAccount">
-                  <img src="/public//img/icons//user-icon.png" alt="">
-                  <span>Comprador</span>
-                </label>
-                <label class="type">
-                    <input type="radio" name="type-accout" id="radio-vendedor" value="vendedor" v-model="typeAccount">
-                    <img src="/public/img/icons/loja-black-outlined.png" alt="">
-                    <span>Vendedor</span>
-                </label>
-              </div>
-              <div class="accept-terms">
-                <input type="checkbox" name="accept-checkbox" id="accept-checkbox">
-                <p>Aceito os <a href="#">termos e condições</a></p>
-              </div>
               <p v-if="formSubmitted && !isFormValid" class="formInvalid">Por favor insira as informações corretamente</p>
-              <button type="submit">Criar Conta</button>
-
-              <p>Já tem uma conta? <router-link to="/login">Faça Login</router-link></p>
+              <div class="lembrar-de-mim">
+                <input type="checkbox" name="accept-checkbox" id="accept-checkbox">
+                <p>Lembrar de mim</p>
+              </div>
+              <button type="submit">Entrar</button>
+              <p>Não tem uma conta? <router-link to="/register">Cadastre-se</router-link></p>
           </form>
         </main-container>
     </div>
@@ -55,86 +32,59 @@
 import { computed, defineAsyncComponent, ref, watch } from 'vue';
 import MainContainer from '@/components/UI/Container/MainContainer.vue';
 import { useAuthStore } from '@/store/auth';
-import type signInInterface from '@/interfaces/signIn';
 import { useRouter } from 'vue-router';
-import registerUser from '@/services/registerUser';
-import type { UserRegister } from '@/types/User';
+import signIn from '@/services/LoginUser';
+import type signInSingInterface from '@/interfaces/signIn';
+import type CreateUserResponse from '@/interfaces/CreateUserResponse';
 const LabelInputColumn = defineAsyncComponent(() => import('@/components/LabelInputColumn.vue'))
 
 const router = useRouter()
 const store = useAuthStore()
-const nome = ref('');
 const email = ref('');
 const password = ref('');
-const confirmPassword = ref('');
-const typeAccount = ref('');
 const isFormValid = computed(() => {
   return (
-    nome.value.trim() !== '' &&
     email.value.trim() !== '' &&
-    password.value.trim() !== '' &&
-    confirmPassword.value.trim() !== '' &&
-    typeAccount.value.trim() !== ''
+    password.value.trim() !== ''
   )
 })
-const passwordIsEqual = computed(() => {
-  return password.value === confirmPassword.value
-})
 const isLogged = computed<string>(() => store.isLoggedIn!)
-watch(
-  [nome, email, password, confirmPassword, typeAccount], () => {
-    if (formSubmitted.value) {
-      formSubmitted.value = false
-    }
-  }
-)
 watch(isLogged, () => {
   if(isLogged.value){
       router.push('/')
     }
 })
 const formSubmitted = ref(false)
-async function createAccount() {
+
+async function LoginAccount() {
   formSubmitted.value = true
 
-  if (!isFormValid.value || !passwordIsEqual.value) {
+  if (!isFormValid.value) {
     return
   }
 
-  const userData: signInInterface = {
+  const userData: signInSingInterface = {
     email: email.value,
     password: password.value
   }
 
   try {
-    const response = await store.createAccout(userData)
+    const response = await signIn(userData) as CreateUserResponse
 
-    if (response?.error?.message) {
-      alert(response.error.message)
-      return
-    }
     if (response && response.idToken) {
-
       store.setUser(response)
-
-      const user: UserRegister = {
-        nome: nome.value,
-        email: email.value,
-        localId: store.getlocalId,
-        tipoConta: typeAccount.value
-      }
-
-      await registerUser(user, response.idToken)
 
       router.push('/')
     } else {
-      alert("Não foi possível criar a conta. Tente novamente.")
+      alert("Falha no login. Verifique suas credenciais e tente novamente.")
     }
+
   } catch (error) {
-    console.error("Erro no cadastro:", error)
-    alert("Ocorreu um erro ao criar a conta. Tente novamente.")
+    console.error("Erro no login:", error)
+    alert("Ocorreu um erro ao tentar logar. Tente novamente.")
   }
 }
+
 </script>
 
 <style scoped>
@@ -245,14 +195,14 @@ form input{
   background-color: #ccc;
   cursor: pointer;
 }
-.accept-terms input{
+.lembrar-de-mim input{
   margin: 0;
 }
-.accept-terms p{
+.lembrar-de-mim p{
   color: black;
 }
 
-.accept-terms{
+.lembrar-de-mim{
   margin: 5px 0px;
   display: flex;
   align-items: center;

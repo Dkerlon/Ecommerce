@@ -1,4 +1,4 @@
-export default interface signInInterface {
+export default interface signInSingInterface {
   email: string,
   password: string
 }

@@ -1,0 +1,161 @@
+<template>
+    <section class="header-main">
+        <div class="header-main-content">
+            <h2>Encontre tudo que você <span style="color: #2863e6;">precisa</span></h2>
+            <p>Milhares de produtos das melhores marcas, com entrega rápida e segura. Compre com confiança no nosso marketplace.</p>
+            <div class="header-main-content-actions">
+                <ButtonFullFilled text="Explorar Produtos"></ButtonFullFilled>
+                <ButtonOutlined text="Vender no MarketPlace" @click="router.push('/sell')"></ButtonOutlined>
+            </div>
+            <div class="header-main-info">
+                <div class="info-card">
+                    <div style="background-color: #e6f5ed;" class="info-card-img-wrapper">
+                        <img src="/img/icons/protect.png" alt=""/>
+                    </div>
+                    <div class="info-text-card">
+                        <h5>Compra Segura</h5>
+                        <span>Proteção Total</span>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div style="background-color: #ebf8fe;" class="info-card-img-wrapper">
+                        <img src="/img/icons/em-transito.png" alt="">
+                    </div>
+                    <div class="info-text-card">
+                        <h5>Entrega Rápida</h5>
+                        <span>Em todo o brasil</span>
+                    </div>
+                </div>
+                <div class="info-card">
+                    <div style="background-color: #fdf4e4;" class="info-card-img-wrapper">
+                        <img src="/img/icons/gráfico.png" alt="">
+                    </div>
+                    <div class="info-text-card">
+                        <h5>Melhores Preços</h5>
+                        <span>Sempre em oferta</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-main-img">
+            <img src="/img/backgroundImages/header-hero-image.jpg" alt="">
+            <div id="header-main-img-produtos">Produtos <br> <span style="color: #2863e6;">10k+</span></div>
+            <div id="header-main-img-vendedores">Vendedores <br> <span style="color: #f97415;">500+</span></div>
+        </div>
+    </section>
+</template>
+
+<script setup lang="ts">
+import { onMounted, ref } from 'vue';
+import ButtonFullFilled from '../buttons/ButtonFullFilled.vue';
+import ButtonOutlined from '../buttons/ButtonOutlined.vue';
+import getUserInfoById from '@/services/getUserInfo/userInfoById';
+import { useAuthStore } from '@/store/auth';
+import { useRouter } from 'vue-router';
+
+const router = useRouter()
+const store =  useAuthStore()
+const idUser = ref(store.getlocalId)
+
+onMounted(() => {
+    getUserInfoById(idUser.value)
+})
+</script>
+
+<style scoped>
+
+.header-main{
+    width: 90%;
+    margin: 100px auto;
+    display: flex;
+    gap: 40px;
+}
+.header-main-content{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.header-main-content h2{
+    font-size: 65px;
+}
+.header-main-content h2 + p{
+    color: #6c727f;
+    font-size: 20px;
+}
+.header-main-content-actions{
+    display: flex;
+    gap: 20px;
+    margin-bottom: 40px;
+}
+.header-main-content-actions button{
+    width: 50%;
+    padding: 15px;
+}
+.header-main-info{
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+}
+.info-card{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 32%;
+}
+.info-card-img-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px;
+    border-radius: 50%;
+}
+.info-card img{
+    width: 30px;
+}
+.info-text-card h5{
+    font-size: 15px;
+}
+.info-text-card span{
+    color: #6c727f;
+    font-size: 13px;
+}
+.header-main-img img{
+    width: 100%;
+    height: 100%;
+    border-radius: 20px;
+
+}
+.header-main-img{
+    width: 50%;
+    position: relative;
+}
+#header-main-img-produtos{
+    position: absolute;
+    top: -20px;
+    right: -20px;
+    background-color: white;
+    border: 1px solid #6c727f;
+    padding: 20px;
+    border-radius: 50%;
+    color: #6c727f;
+    text-align: center;
+}
+#header-main-img-produtos span,#header-main-img-vendedores span{
+    font-size: 23px;
+    font-weight: bold;
+}
+#header-main-img-vendedores{
+    position: absolute;
+    bottom: -20px;
+    left: -20px;
+    background-color: white;
+    border: 1px solid #6c727f;
+    padding: 20px;
+    border-radius: 50%;
+    color: #6c727f;
+    text-align: center;
+}
+</style>

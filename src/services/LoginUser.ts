@@ -1,12 +1,12 @@
-import type signInInterface from "@/interfaces/signIn";
 import type CreateUserResponse from "@/interfaces/CreateUserResponse";
+import type signInInterface from "@/interfaces/signIn";
 import { useStore } from "@/store";
 
-export default async function signUp(userData: signInInterface): Promise<CreateUserResponse | void> {
+export default async function signIn(userData: signInInterface): Promise<CreateUserResponse | void> {
   try {
     const mainStore = useStore()
     const api_key = mainStore.getApiKey
-    const url_api = `https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=${api_key}`;
+    const url_api = `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${api_key}`;
 
     const response = await fetch(url_api, {
       method: "POST",
@@ -20,7 +20,6 @@ export default async function signUp(userData: signInInterface): Promise<CreateU
     });
 
     const data: CreateUserResponse = await response.json();
-
     return data
   } catch (error) {
     console.error("Erro inesperado:", error);
