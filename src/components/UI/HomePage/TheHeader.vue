@@ -1,10 +1,10 @@
 <template>
     <header>
-        <nav>
+        <nav class="flex p-2 justify-between items-center">
             <RouterLink to="/">
-            <div class="title">
-                <img style="width: 40px;" src="/img/icons/loja.png" alt="">
-                <h3>MarketPlace</h3>
+            <div class="flex items-center gap-4">
+                <img style="width: 35px;" src="/img/icons/loja.png" alt="">
+                <h3 class="text-2xl font-black">MarketPlace</h3>
             </div>
             </RouterLink>
             <InputSearch place-holder="Buscar Produtos..."></InputSearch>
@@ -65,13 +65,6 @@ header img{
 header{
     width: 90%;
     margin: 0 auto;
-}
-nav{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 0 auto;
-    padding: 10px;
 }
 .title{
     display: flex;

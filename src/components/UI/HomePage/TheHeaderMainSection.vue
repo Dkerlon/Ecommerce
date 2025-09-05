@@ -1,11 +1,11 @@
 <template>
-    <section class="header-main">
-        <div class="header-main-content">
-            <h2>Encontre tudo que você <span style="color: #2863e6;">precisa</span></h2>
-            <p>Milhares de produtos das melhores marcas, com entrega rápida e segura. Compre com confiança no nosso marketplace.</p>
-            <div class="header-main-content-actions">
-                <ButtonFullFilled text="Explorar Produtos"></ButtonFullFilled>
-                <ButtonOutlined text="Vender no MarketPlace" @click="router.push('/sell')"></ButtonOutlined>
+    <section class="flex flex-col md:flex-row w-[90%] m-auto my-25 gap-10 min-h-[500px]">
+        <div class="w-[50%] flex gap-8 flex-col">
+            <h2 class="text-6xl font-semibold">Encontre tudo que você <span class="font-black text-[#2863e6]">precisa</span></h2>
+            <p class="text-md text-[#6c727f]">Milhares de produtos das melhores marcas, com entrega rápida e segura. Compre com confiança no nosso marketplace.</p>
+            <div class="flex w-full justify-between items-center mb-13">
+                <ButtonFullFilled text="Explorar Produtos" class="w-full"></ButtonFullFilled>
+                <ButtonOutlined text="Vender no MarketPlace" @click="router.push('/sell')" class="w-full"></ButtonOutlined>
             </div>
             <div class="header-main-info">
                 <div class="info-card">
@@ -63,36 +63,6 @@ onMounted(() => {
 </script>
 
 <style scoped>
-
-.header-main{
-    width: 90%;
-    margin: 100px auto;
-    display: flex;
-    gap: 40px;
-}
-.header-main-content{
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-.header-main-content h2{
-    font-size: 65px;
-}
-.header-main-content h2 + p{
-    color: #6c727f;
-    font-size: 20px;
-}
-.header-main-content-actions{
-    display: flex;
-    gap: 20px;
-    margin-bottom: 40px;
-}
-.header-main-content-actions button{
-    width: 50%;
-    padding: 15px;
-}
 .header-main-info{
     display: flex;
     gap: 15px;
@@ -137,7 +107,7 @@ onMounted(() => {
     top: -20px;
     right: -20px;
     background-color: white;
-    border: 1px solid #6c727f;
+    box-shadow: 0 0 0 0.3px;
     padding: 20px;
     border-radius: 50%;
     color: #6c727f;
@@ -152,8 +122,8 @@ onMounted(() => {
     bottom: -20px;
     left: -20px;
     background-color: white;
-    border: 1px solid #6c727f;
-    padding: 20px;
+    box-shadow: 0 0 0 0.3px;
+    padding: 25px;
     border-radius: 50%;
     color: #6c727f;
     text-align: center;
