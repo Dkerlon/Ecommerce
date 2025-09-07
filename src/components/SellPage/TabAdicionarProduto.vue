@@ -1,51 +1,53 @@
 <template>
-  <MainContainer>
-    <h3 class="font-bold text-xl">Adicionar Novo Produto</h3>
-    <p class="text-[#6c727f] text-sm mb-6 my-1">Preencha as informações do seu produto</p>
+  <form v-on:submit.prevent="cadastrarProduto">
+    <MainContainer>
+      <h3 class="font-bold text-xl">Adicionar Novo Produto</h3>
+      <p class="text-[#6c727f] text-sm mb-6 my-1">Preencha as informações do seu produto</p>
 
-    <div class="flex justify-between items-center gap-10 mb-2.5">
-      <div class="flex flex-col w-[90%]">
-        <label for="nome-produto" class="font-bold text-sm mb-2">Nome do produto</label>
-        <InputText :modelValue="produto.nome" @update:modelValue="produto.nome = $event" place-holder="Digite o nome do produto"/>
+      <div class="flex justify-between items-center gap-10 mb-2.5">
+        <div class="flex flex-col w-[90%]">
+          <label for="nome-produto" class="font-bold text-sm mb-2">Nome do produto</label>
+          <InputText :required="true" :modelValue="produto.nome" @update:modelValue="produto.nome = $event" place-holder="Digite o nome do produto"/>
+        </div>
+        <div class="flex flex-col w-[90%]">
+          <label for="categoria" class="font-bold text-sm mb-2">Categoria</label>
+          <TheSelect :required="true" v-model="produto.categoria" :options="categorias" placeholder="Selecione a categoria"/>
+        </div>
       </div>
-      <div class="flex flex-col w-[90%]">
-        <label for="categoria" class="font-bold text-sm mb-2">Categoria</label>
-        <TheSelect v-model="produto.categoria" :options="categorias" placeholder="Selecione a categoria"/>
+
+      <div class="flex justify-between items-center gap-10 mb-2.5">
+        <div class="flex flex-col w-[90%]">
+          <label for="preco" class="font-bold text-sm mb-2">Preço (R$)</label>
+          <InputNumber :modelValue="produto.preco.original" @update:modelValue="produto.preco.original = $event" place-holder="0.00"/>
+        </div>
+        <div class="flex flex-col w-[90%]">
+          <label for="quantidade" class="font-bold text-sm mb-2">Quantidade em estoque</label>
+          <InputNumber :required="true" :modelValue="produto.quantidadeDisponivel" @update:modelValue="produto.quantidadeDisponivel = $event" place-holder="0"/>
+        </div>
       </div>
-    </div>
 
-    <div class="flex justify-between items-center gap-10 mb-2.5">
-      <div class="flex flex-col w-[90%]">
-        <label for="preco" class="font-bold text-sm mb-2">Preço (R$)</label>
-        <InputNumber :modelValue="produto.preco.original" @update:modelValue="produto.preco.original = $event" place-holder="0.00"/>
+      <div class="mb-2.5">
+        <label for="descricao" class="font-bold text-sm">Descrição</label>
+        <textarea required="true" v-model="produto.descricao" class="outline-none w-full border text-sm border-[#e5e7eb] p-2 rounded-lg focus:ring-2 focus:ring-blue-500 my-2" placeholder="Descreva o seu produto detalhadamente..." id="descricao"></textarea>
       </div>
-      <div class="flex flex-col w-[90%]">
-        <label for="quantidade" class="font-bold text-sm mb-2">Quantidade em estoque</label>
-        <InputNumber :modelValue="produto.quantidadeDisponivel" @update:modelValue="produto.quantidadeDisponivel = $event" place-holder="0"/>
+
+      <div class="mb-2.5">
+        <label for="urlp" class="font-bold text-sm">URL Pública de imagem</label>
+        <InputText :required="true" :modelValue="produto.fotos[0]" @update:modelValue="produto.fotos[0] = $event" place-holder="Digite a URL pública da imagem"/>
       </div>
-    </div>
 
-    <div class="mb-2.5">
-      <label for="descricao" class="font-bold text-sm">Descrição</label>
-      <textarea v-model="produto.descricao" class="outline-none w-full border text-sm border-[#e5e7eb] p-2 rounded-lg focus:ring-2 focus:ring-blue-500 my-2" placeholder="Descreva o seu produto detalhadamente..." id="descricao"></textarea>
-    </div>
+      <div @click="alertar">
+        <label for="img-produto" class="font-bold text-sm mb-2 inline-block">Imagens do produto</label>
+        <p class="font-bold text-sm text-red-400">Temporariamente desbilitado, Digite a URL pública da imagem no campo acima.</p>
+        <InputFile/>
+      </div>
 
-    <div class="mb-2.5">
-      <label for="urlp" class="font-bold text-sm">URL Pública de imagem</label>
-      <InputText :modelValue="produto.fotos[0]" @update:modelValue="produto.fotos[0] = $event" place-holder="Digite a URL pública da imagem"/>
-    </div>
-
-    <div @click="alertar">
-      <label for="img-produto" class="font-bold text-sm mb-2 inline-block">Imagens do produto</label>
-      <p class="font-bold text-sm text-red-400">Temporariamente desbilitado, Digite a URL pública da imagem no campo acima.</p>
-      <InputFile/>
-    </div>
-
-    <div class="flex justify-end mt-6 gap-5">
-      <ButtonOutlined text="Salvar como rascunho" @click="salvarRascunho"/>
-      <ButtonFullFilled text="Cadastrar Produto" @click="cadastrarProduto"/>
-    </div>
-  </MainContainer>
+      <div class="flex justify-end mt-6 gap-5">
+        <ButtonOutlined text="Salvar como rascunho" @click="salvarRascunho"/>
+        <ButtonFullFilled type="submit" text="Cadastrar Produto"/>
+      </div>
+    </MainContainer>
+  </form>
 </template>
 
 <script setup lang="ts">

@@ -7,7 +7,8 @@
 <script setup lang="ts">
 defineProps<{
     modelValue: number,
-    placeHolder: string
+    placeHolder: string,
+    required?: boolean
 }>()
 defineEmits<{
   (e: 'update:modelValue', value: number): void
