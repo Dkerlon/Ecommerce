@@ -30,9 +30,15 @@
       <textarea v-model="produto.descricao" class="outline-none w-full border text-sm border-[#e5e7eb] p-2 rounded-lg focus:ring-2 focus:ring-blue-500 my-2" placeholder="Descreva o seu produto detalhadamente..." id="descricao"></textarea>
     </div>
 
-    <div>
+    <div class="mb-2.5">
+      <label for="urlp" class="font-bold text-sm">URL Pública de imagem</label>
+      <InputText :modelValue="produto.fotos[0]" @update:modelValue="produto.fotos[0] = $event" place-holder="Digite a URL pública da imagem"/>
+    </div>
+
+    <div @click="alertar">
       <label for="img-produto" class="font-bold text-sm mb-2 inline-block">Imagens do produto</label>
-      <InputFile @update:files="onFilesChange"/>
+      <p class="font-bold text-sm text-red-400">Temporariamente desbilitado, Digite a URL pública da imagem no campo acima.</p>
+      <InputFile/>
     </div>
 
     <div class="flex justify-end mt-6 gap-5">
@@ -83,11 +89,6 @@ const categorias = [
   { label: 'Esportes', value: 'esportes' }
 ];
 
-// Função para atualizar imagens
-const onFilesChange = (files: File[]) => {
-  produto.fotos = files.map(file => URL.createObjectURL(file));
-};
-
 // Cadastrar produto
 const cadastrarProduto = async () => {
   try {
@@ -105,6 +106,10 @@ const salvarRascunho = () => {
   console.log('Produto salvo como rascunho:', produto);
   alert('Rascunho salvo!');
 };
+
+function alertar(){
+  alert('Temporariamente desabilitado, por favor insira uma URL de imagem manualmente.')
+}
 
 watch(produto, () => {
   produto.preco.atual = produto.preco.original
