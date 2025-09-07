@@ -1,5 +1,5 @@
 <template>
-    <button class="text-sm">{{ text }}</button>
+    <button class="text-sm bg-blue-600 text-white py-2 px-5 rounded-lg font-semibold cursor-pointer hover:bg-blue-700">{{ text }}</button>
 </template>
 
 <script setup lang=ts>
@@ -9,15 +9,5 @@ defineProps<{
 </script>
 
 <style scoped>
-button{
-    padding: 8px;
-    border: none;
-    background-color: #2863e6;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-}
-button:hover{
-    background-color: #044be4;
-}
+
 </style>

@@ -3,9 +3,9 @@
         <div class="w-[50%] flex gap-8 flex-col">
             <h2 class="text-6xl font-semibold">Encontre tudo que você <span class="font-black text-[#2863e6]">precisa</span></h2>
             <p class="text-md text-[#6c727f]">Milhares de produtos das melhores marcas, com entrega rápida e segura. Compre com confiança no nosso marketplace.</p>
-            <div class="flex w-full justify-between items-center mb-13">
+            <div class="flex w-full justify-between items-center mb-13 gap-5">
                 <ButtonFullFilled text="Explorar Produtos" class="w-full"></ButtonFullFilled>
-                <ButtonOutlined text="Vender no MarketPlace" @click="router.push('/sell')" class="w-full"></ButtonOutlined>
+                <ButtonOutlined text="Vender no MarketPlace" @click="router.push('/sell')" class="w-full text-nowrap"></ButtonOutlined>
             </div>
             <div class="header-main-info">
                 <div class="info-card">
