@@ -6,6 +6,8 @@ export const useUserInfo = defineStore('userInfo', {
       email: '',
       nome: 'Kerlon Brito de Aragão',
       carrinho: [],
+      favoritos:[],
+      notificacoes:[],
       tipoConta: ''
     }
   },

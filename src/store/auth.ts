@@ -11,7 +11,7 @@ export const useAuthStore = defineStore("auth", {
     }
   },
   getters: {
-    isLoggedIn(state): string | null {
+    isLoggedIn(state): string {
       return state.idToken
     },
     getlocalId(state){
