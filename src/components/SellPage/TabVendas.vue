@@ -2,7 +2,6 @@
   <main-container class="">
     <h3 class="font-bold text-xl">Histórico de Vendas</h3>
     <p class="text-[#6c727f] text-sm mb-6 my-1">Acompanhe suas vendas recentes</p>
-
     <table class="w-full">
       <thead>
         <tr class="bg-[##ffffff]">

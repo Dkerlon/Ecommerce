@@ -59,4 +59,15 @@ export class MeusProdutosService {
       throw error;
     }
   }
+  async getProdutoById(id: string){
+    try{
+      const response = await axiosInstance.get(`/produtos/${id}.json`)
+      const produto: Produto = response.data
+      console.log(produto)
+      return produto
+    }catch (error){
+      console.error("Erro ao buscar produto:", error);
+      throw error;
+    }
+  }
 }

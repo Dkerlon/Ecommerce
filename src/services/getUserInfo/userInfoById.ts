@@ -1,8 +1,11 @@
-export default async function getUserInfoById(id:string) {
+import axiosInstance from "@/config/axiosConfig"
+import type { userInfo } from "@/interfaces/User"
+
+export default async function getUserInfoById(id:string): Promise<userInfo | undefined>    {
     try{
-        const response = await fetch(`https://ecommerce-e0a11-default-rtdb.firebaseio.com/users/${id}.json`)
-        const data = await response.json()
-        return data
+      const response = await axiosInstance.get(`/users/${id}.json`)
+
+      return response.data
     }
     catch(error){
         console.log(error)

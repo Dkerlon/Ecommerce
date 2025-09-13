@@ -23,7 +23,6 @@ const routes = [
     },
     {
         path: '/products/:id',
-        props: true,
         component: () => import('@/pages/ProdutoPage.vue'),
         meta: { requiresAuth: false, onlySeller: false}
     }

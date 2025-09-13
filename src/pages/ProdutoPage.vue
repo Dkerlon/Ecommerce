@@ -1,60 +1,133 @@
 <template>
   <TheHeader/>
-  <section>
-    <div>
-      <img src="" alt="">
-      <div>
-        <img src="" alt="">
-        <img src="" alt="">
-        <img src="" alt="">
+  <section class="flex gap-10 my-4 w-[90%] m-auto" v-if="!isLoading">
+    <div class="w-[100%] max-w-[850px]">
+      <img class="w-full rounded-xl" :src="produto.fotos[0]" alt="imagem1doproduto">
+      <div class="flex gap-5 py-4">
+        <img class="w-[22%] rounded-xl" :src="produto.fotos[0]" alt="imagem1doproduto">
+        <img class="w-[22%] rounded-xl" :src="produto.fotos[0]" alt="imagem1doproduto">
+        <img class="w-[22%] rounded-xl" :src="produto.fotos[0]" alt="imagem1doproduto">
+        <img class="w-[22%] rounded-xl" :src="produto.fotos[0]" alt="imagem1doproduto">
       </div>
     </div>
-    <div>
-      <div class="tag"></div>
-      <h2>Camiseta Polo Masculina</h2>
+    <div class="w-[50%]">
       <div>
-        <div class="stars relative w-32 h-6">
+        <div class="flex gap-5 mb-2">
+          <div class="badge bg-orange-500 text-white py-4 px-2">{{ produto.categoria }}</div>
+          <div v-if="produto.preco.emPromocao" class="badge bg-blue-600 text-white py-4 px-2">-{{ produto.preco.percentualDesconto }} OFF</div>
+        </div>
+        <h2 class="font-bold text-xl">{{ produto.nome }}</h2>
+        <div class="flex items-center gap-2 mb-2">
+          <div class="stars relative w-26 h-6 mb-2">
+            <div class="stars-empty absolute top-0 left-0 w-full h-full text-gray-300 text-2xl flex">★★★★★</div>
+            <div class="stars-full absolute top-0 left-0 w-full h-full text-yellow-400 text-2xl flex overflow-hidden"
+                :style="{ width: `${(ratingT / 5) * 100}%` }">★★★★★</div>
+          </div>
+          <span class="text-xs font-bold">{{ ratingT.toFixed(1) }}</span>
+          <span class="text-xs text-[#6c727f]">{{ '(' + avaliacoes + ')' }}</span>
+          <div class="text-xs text-[#6c727f]">Vendido por {{ vendedorInfo.nome }}</div>
+        </div>
+      </div>
+      <div class="flex gap-2 items-center">
+        <h3 class="font-bold text-2xl text-green-600">R$ {{ produto.preco.atual.toFixed(2) }}</h3>
+        <h4 v-if="produto.preco.emPromocao" class="font-bold text-sm text-[#6c727f]"><del>R$ {{ produto.preco.original.toFixed(2) }}</del></h4>
+      </div>
+      <span v-if="produto.preco.emPromocao" class="text-xs text-green-600">Você economizou RS {{ (produto.preco.atual - produto.preco.original).toFixed(2) }}</span>
+      <div>
+        <h5 class="text-sm font-bold my-2"><b>Descrição</b></h5>
+        <p class="text-sm text-[#6c727f]">{{ produto.descricao }}</p>
+      </div>
+      <div class="flex items-center gap-2 my-1">
+        <span class="text-sm font-bold">Quantidade</span>
+        <div class="flex items-center gap-4 border border-[#e5e7eb] px-3 py-1 rounded-md">
+          <span class="border-r border-[#e5e7eb] pr-3 hover:opacity-60 cursor-pointer text-sm">-</span>
+          <span class="border-r border-[#e5e7eb] pr-3 text-sm">{{ produto.quantidadeDisponivel }}</span>
+          <span class="hover:opacity-60 cursor-pointer text-sm">+</span>
+        </div>
+      </div>
+      <TheCard style="padding: 0; border: none;">
+        <h5 class="font-bold text-sm my-2">Especificações</h5>
+        <div class="border border-[#e5e7eb] rounded-xl p-3">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold">Nome:</span>
+            <span class="text-sm text-[#6c727f]">Descrição</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold">Nome:</span>
+            <span class="text-sm text-[#6c727f]">Descrição</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold">Nome:</span>
+            <span class="text-sm text-[#6c727f]">Descrição</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-bold">Nome:</span>
+            <span class="text-sm text-[#6c727f]">Descrição</span>
+          </div>
+        </div>
+      </TheCard>
+      <div class="flex mb-2 gap-3">
+        <ButtonFullFilled class="w-full" text="Adicionar ao carrinho">
+          <template #img-start>
+            <div class="flex items-center  justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+            </svg>
+            </div>
+          </template>
+        </ButtonFullFilled>
+        <ButtonOutlined>
+          <template #img-start>
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z"/>
+              </svg>
+            </div>
+          </template>
+        </ButtonOutlined>
+        <ButtonOutlined>
+          <template #img-start>
+            <div>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5 ">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+              </svg>
+            </div>
+          </template>
+        </ButtonOutlined>
+      </div>
+      <div>
+        <ButtonFullFilled class="bg-orange-500 w-full hover:bg-orange-600" text="Comprar Agora"/>
+      </div>
+      <div class="flex flex-col gap-2 my-4">
+        <div class="flex items-center gap-3 text-xs text-[#6c727f]">
+          <img class="w-7" src="/img/icons/em-transito.png" alt="">
+          <p>Entrega grátis para todo o Brasil</p>
+        </div>
+        <div class="flex items-center gap-3 text-xs text-[#6c727f]">
+          <img class="w-7" src="/img/icons/protect.png" alt="">
+          <p>Compra 100% segura e protegida</p>
+        </div>
+        <div class="flex items-center gap-3 text-xs text-[#6c727f]">
+          <img class="w-7" src="/public/img/icons/gráfico.png" alt="">
+          <p>Devolução grátis em até 30 dias</p>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <section>
+    <h3>Avaliações dos clientes</h3>
+    <div>
+      <div class="flex items-center gap-2 mb-2">
+        <div class="stars relative w-26 h-6 mb-2">
           <div class="stars-empty absolute top-0 left-0 w-full h-full text-gray-300 text-2xl flex">★★★★★</div>
           <div class="stars-full absolute top-0 left-0 w-full h-full text-yellow-400 text-2xl flex overflow-hidden"
               :style="{ width: `${(ratingT / 5) * 100}%` }">★★★★★</div>
-          <span class="text-xs text-[#6c727f] absolute top-2.5 left-27">(2156)</span>
         </div>
-        <div>Vendido por Fashion Brasil</div>
-      </div>
-    </div>
-    <h3>R$ 89,99</h3>
-    <div>
-      <span><b>Descrição</b></span>
-      <p>Camiseta polo de algodão premium, disponível em várias cores. Perfeita para o dia a dia.</p>
-    </div>
-    <div>
-      <span>Quantidade</span>
-      <div>
-        <span>-</span>
-        <span>1</span>
-        <span>+</span>
-      </div>
-    </div>
-    <div>
-      <ButtonFullFilled text="Adicionar ao carrinho"/>
-      <ButtonOutlined text="t"/>
-      <ButtonOutlined text="t"/>
-    </div>
-    <div>
-      <ButtonFullFilled text="Comprar Agora"/>
-    </div>
-    <div>
-      <div>
-        <img src="" alt="">
-        <p>Entrega grátis para todo o Brasil</p>
+        <span class="text-md font-bold">{{ ratingT.toFixed(1) }}</span>
       </div>
       <div>
-        <img src="" alt="">
-        <p>Entrega grátis para todo o Brasil</p>
-      </div>
-      <div>
-        <img src="" alt="">
-        <p>Entrega grátis para todo o Brasil</p>
+        
       </div>
     </div>
   </section>
@@ -64,5 +137,52 @@
 import TheHeader from '@/components/UI/HomePage/TheHeader.vue';
 import ButtonFullFilled from '@/components/UI/buttons/ButtonFullFilled.vue';
 import ButtonOutlined from '@/components/UI/buttons/ButtonOutlined.vue';
-const ratingT = Math.random()*5
+import type { userInfo } from '@/interfaces/User';
+import { MeusProdutosService, type Produto } from '@/services/MeusProdutosService';
+import getUserInfoById from '@/services/getUserInfo/userInfoById';
+import TheCard from '@/components/UI/Container/TheCard.vue';
+import { onMounted, reactive, ref } from 'vue';
+import { useRoute } from 'vue-router';
+const route = useRoute()
+const produtoService = new MeusProdutosService
+let produto = reactive<Produto>({} as Produto)
+let vendedorInfo = reactive<userInfo>({} as userInfo)
+const isLoading = ref(true)
+const ratingT = ref(5)
+const avaliacoes = ref(produto.avaliacoes?.length || 0)
+
+async function getProduto(){
+  try{
+    isLoading.value = true
+    const response = await produtoService.getProdutoById(String(route.params.id))
+    produto = response
+  }catch(error){
+    console.log(error)
+  }
+}
+
+async function getVendedorInfo(){
+  try{
+    const response = await getUserInfoById(produto.vendedorId)
+    console.log(produto.vendedorId)
+    if(response){
+      vendedorInfo = response
+    }
+    console.log(response)
+  }catch(error){
+    console.log(error)
+  }
+}
+
+onMounted( async () => {
+  try{
+    isLoading.value = true
+    await getProduto()
+    await getVendedorInfo()
+  }catch{
+    console.log('Error')
+  }finally{
+    isLoading.value = false
+  }
+})
 </script>
