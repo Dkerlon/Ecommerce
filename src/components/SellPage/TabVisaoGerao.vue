@@ -1,5 +1,5 @@
 <template>
-  <section value="overview">
+  <section value="overview" class="w-[100%]">
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
       <div class="rounded-lg bordaCard bg-card text-card-foreground shadow-sm p-6">
         <div class="flex flex-row items-center justify-between space-y-0 pb-2">

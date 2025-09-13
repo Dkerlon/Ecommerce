@@ -1,135 +1,152 @@
 <template>
-    <main>
-        <div class="filters">
-            <InputSearch class="filtroInput" place-holder="Buscar Produtos, marcas, categorias..."></InputSearch>
-            <div class="showMoreFilters">
-                <img src="/img/icons/filter.png" alt="">
-                <span>Filtros</span>
+  <main>
+    <!-- Barra de busca e layout -->
+    <div class="filters">
+      <InputSearch
+        class="filtroInput"
+        v-model="searchTerm"
+        place-holder="Buscar Produtos, marcas, categorias..."
+      ></InputSearch>
+
+      <div class="showMoreFilters" @click="showFilters = !showFilters">
+        <img src="/img/icons/filter.png" alt="">
+        <span>Filtros</span>
+      </div>
+
+      <div class="changeLayout">
+        <div @click="layoutRow = false" class="img-div"><img src="/img/icons/grid.png" alt=""></div>
+        <div @click="layoutRow = true" class="img-div"><img src="/img/icons/lista.png" alt=""></div>
+      </div>
+    </div>
+
+    <section class="flex gap-10">
+      <!-- Coluna de filtros -->
+      <div v-if="showFilters" class="flex gap-5 flex-col w-[50%] max-w-[300px]">
+
+        <!-- Categorias -->
+        <TheCard>
+          <label class="font-semibold text-sm mb-2 inline-block">Categorias</label>
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center gap-2" v-for="cat in categoriasOp" :key="cat.value">
+              <input type="checkbox" :id="cat.value" :value="cat.value" v-model="categoriasSelecionadas"/>
+              <label :for="cat.value" class="text-sm font-medium">{{ cat.label }}</label>
             </div>
-            <div class="changeLayout">
-                <div class="img-div"><img src="/img/icons/grid.png" alt=""></div>
-                <div class="img-div"><img src="/img/icons/lista.png" alt=""></div>
+          </div>
+        </TheCard>
+
+        <!-- Faixa de preço -->
+        <TheCard>
+          <label class="font-semibold text-sm mb-2 inline-block">Faixa de Preço</label>
+          <TheSlider :min="0" :max="5000" v-model="preco" label="Preço"></TheSlider>
+        </TheCard>
+
+        <!-- Avaliação -->
+        <TheCard>
+          <label class="font-semibold text-sm mb-2 inline-block">Avaliação</label>
+          <div class="flex flex-col gap-2">
+            <div v-for="star in [5,4,3,2,1]" :key="star" class="flex items-center gap-2">
+              <input type="checkbox" :id="star + '-star'" :value="star" v-model="avaliacaoSelecionada"/>
+              <label :for="star + '-star'" class="text-sm font-medium">{{ star }}+ estrela</label>
             </div>
+          </div>
+        </TheCard>
+
+        <!-- Disponibilidade -->
+        <TheCard>
+          <label class="font-semibold text-sm mb-2 inline-block">Disponibilidade</label>
+          <div class="flex items-center gap-2">
+            <input type="checkbox" id="apenas-estoque" v-model="apenasEstoque"/>
+            <label for="apenas-estoque" class="font-medium text-sm">Apenas em estoque</label>
+          </div>
+        </TheCard>
+
+      </div>
+
+      <!-- Lista de produtos -->
+      <div class="h-500 w-full">
+        <h3 class="pt-5 font-black text-2xl">Produtos em Destaque</h3>
+        <p class="text-[#6c727f] text-sm py-1">{{ produtosFiltrados.length }} produtos encontrados</p>
+
+        <div class="flex w-full flex-wrap gap-10 justify-center">
+          <ProdutoCard
+            v-for="produto in produtosFiltrados"
+            :key="produto.id || produto.nome"
+            :produto="produto"
+            :full-width="layoutRow"
+          />
+          <div v-if="produtosFiltrados.length === 0" class="py-10 text-red-500">
+            <p>Nenhum produto encontrado...</p>
+          </div>
         </div>
-
-        <section class="flex gap-10">
-          <div class="flex gap-5 flex-col w-[50%] max-w-[300px]">
-            <TheCard>
-              <label for="ordenar" class="font-semibold text-sm mb-2 inline-block">Ordenar Por</label>
-              <TheSelect :required="true" v-model="relevancia" :options="relevanciaOp" placeholder="Selecione a categoria"/>
-            </TheCard>
-            <TheCard>
-              <label for="ordenar" class="font-semibold text-sm mb-2 inline-block">Categorias</label>
-
-              <div class="flex flex-col gap-3">
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" id="eletronico"/>
-                  <label class="text-sm font-medium" for="eletronico">Eletrônico</label>
-                </div>
-
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" id="roupas"/>
-                  <label class="text-sm font-medium" for="roupas">Roupas</label>
-                </div>
-
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" id="livros"/>
-                  <label class="font-medium text-sm" for="livros">Livros</label>
-                </div>
-
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" id="moveis"/>
-                  <label class="font-medium text-sm" for="moveis">Móveis</label>
-                </div>
-
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" id="beleza"/>
-                  <label class="font-medium text-sm" for="beleza">Beleza</label>
-                </div>
-
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" id="esportes"/>
-                  <label class="font-medium text-sm" for="esportes">Esportes</label>
-                </div>
-              </div>
-            </TheCard>
-            <TheCard>
-              <label for="ordenar" class="font-semibold text-sm mb-2 inline-block">Faixa de Preço</label>
-
-              <TheSlider :min="0" :max="5000" v-model="preco" label="Preço"></TheSlider>
-            </TheCard>
-            <TheCard>
-              <label for="ordenar" class="font-semibold text-sm mb-2 inline-block">Avaliação</label>
-
-              <div class="flex flex-col gap-3">
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" id="5-star"/>
-                  <label class="text-sm font-medium" for="5-star">5+ estrela</label>
-                </div>
-
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" id="4-star"/>
-                  <label class="text-sm font-medium" for="4-star">4+ estrela</label>
-                </div>
-
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" id="3-star"/>
-                  <label class="text-sm font-medium" for="3-star">3+ estrela</label>
-                </div>
-
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" id="2-star"/>
-                  <label class="text-sm font-medium" for="2-star">2+ estrela</label>
-                </div>
-
-                <div class="flex items-center gap-2">
-                  <input type="checkbox" id="1-star"/>
-                  <label class="text-sm font-medium" for="1-star">1+ estrela</label>
-                </div>
-              </div>
-            </TheCard>
-            <TheCard>
-              <label for="ordenar" class="font-semibold text-sm mb-2 inline-block">Disponibilidade</label>
-
-              <div class="flex items-center gap-2">
-                  <input type="checkbox" id="apenas-estoque"/>
-                  <label class="font-medium text-sm" for="apenas-estoque">Apenas em estoque</label>
-              </div>
-            </TheCard>
-          </div>
-          <div class="h-500 w-full">
-            <h3 class="pt-5 font-black text-2xl">Produtos em Destaque</h3>
-            <p class="text-[#6c727f] text-sm py-1">3 produtos encontrados</p>
-
-            <div class ="grid grid-cols-1 sm:grid-cols-2 2xl:grid-cols-4 gap-6 mt-6">
-              <ProdutoCard/>
-              <ProdutoCard/>
-              <ProdutoCard/>
-              <ProdutoCard/>
-            </div>
-          </div>
-        </section>
-    </main>
+      </div>
+    </section>
+  </main>
 </template>
 
 <script setup lang="ts">
+import { ref, computed, onMounted } from 'vue';
 import InputSearch from '../Inputs/InputSearch.vue';
 import TheCard from '../Container/TheCard.vue';
-import TheSelect from '../Inputs/TheSelect.vue';
 import TheSlider from '../Inputs/TheSlider.vue';
 import ProdutoCard from '@/components/Produto/ProdutoCard.vue';
-import { ref } from 'vue';
+import { MeusProdutosService, type Produto } from '@/services/MeusProdutosService';
 
-const relevanciaOp = [
-    {value: 'mais-relevantes', label: 'Mais Relevantes'},
-    {value: 'menor-preco', label: 'Menor Preço'},
-    {value: 'maior-preco', label: 'Maior Preço'},
-    {value: 'melhor-avaliado', label: 'Melhor Avaliado'},
-    {value: 'mais-recente', label: 'Mais Recente'}
-]
-const preco = ref(0)
-const relevancia = ref('')
+const MeusProdutosServiceInstance = new MeusProdutosService();
+
+// Opções
+
+const categoriasOp = [
+  { value: 'Eletrônico', label: 'Eletrônico' },
+  { value: 'Roupas', label: 'Roupas' },
+  { value: 'Livros', label: 'Livros' },
+  { value: 'Móveis', label: 'Móveis' },
+  { value: 'Beleza', label: 'Beleza' },
+  { value: 'Esportes', label: 'Esportes' }
+];
+
+// Estados
+const showFilters = ref(true);
+const layoutRow = ref(false);
+const preco = ref(5000);
+const searchTerm = ref('');
+const categoriasSelecionadas = ref<string[]>([]);
+const avaliacaoSelecionada = ref<number[]>([]);
+const apenasEstoque = ref(false);
+
+const produtos = ref<Produto[]>([]);
+
+onMounted(async () => {
+  produtos.value = await MeusProdutosServiceInstance.getAllProdutos();
+});
+
+const produtosFiltrados = computed(() => {
+  return produtos.value.filter(p => {
+    if (searchTerm.value) {
+      const termo = searchTerm.value.toLowerCase();
+      if (
+        !p.nome.toLowerCase().includes(termo) &&
+        !p.categoria.toLowerCase().includes(termo)
+      ) {
+        return false;
+      }
+    }
+    if (categoriasSelecionadas.value.length > 0 &&
+        !categoriasSelecionadas.value.includes(p.categoria)) return false;
+    if (p.preco.atual > preco.value) return false;
+
+    if (avaliacaoSelecionada.value.length > 0) {
+      const avaliacaoMedia = p.avaliacoes?.reduce((a,b)=>a+b,0)/ (p.avaliacoes?.length||1) || 0;
+      const maxAvaliacaoFiltro = Math.max(...avaliacaoSelecionada.value);
+      if (avaliacaoMedia < maxAvaliacaoFiltro) return false;
+    }
+
+    if (apenasEstoque.value && p.quantidadeDisponivel <= 0) return false;
+
+    return true;
+  });
+});
 </script>
+
 
 <style scoped>
 main{

@@ -83,12 +83,12 @@ const produto = reactive<Produto>({
 });
 
 const categorias = [
-  { label: 'Eletrônicos', value: 'eletronicos' },
-  { label: 'Roupas', value: 'roupas' },
-  { label: 'Livros', value: 'livros' },
-  { label: 'Móveis', value: 'moveis' },
-  { label: 'Beleza', value: 'beleza' },
-  { label: 'Esportes', value: 'esportes' }
+  { label: 'Eletrônicos', value: 'Eletrônicos' },
+  { label: 'Roupas', value: 'Roupas' },
+  { label: 'Livros', value: 'Livros' },
+  { label: 'Móveis', value: 'Móveis' },
+  { label: 'Beleza', value: 'Beleza' },
+  { label: 'Esportes', value: 'Esportes' }
 ];
 
 // Cadastrar produto

@@ -1,6 +1,6 @@
 <template>
-    <section class="flex flex-col md:flex-row w-[90%] m-auto my-25 gap-10 min-h-[500px]">
-        <div class="w-[50%] flex gap-8 flex-col">
+    <section class="flex flex-col md:flex-row w-[90%] m-auto my-25 gap-10">
+        <div class="w-[60%] flex gap-8 flex-col">
             <h2 class="text-6xl font-semibold">Encontre tudo que você <span class="font-black text-[#2863e6]">precisa</span></h2>
             <p class="text-md text-[#6c727f]">Milhares de produtos das melhores marcas, com entrega rápida e segura. Compre com confiança no nosso marketplace.</p>
             <div class="flex w-full justify-between items-center mb-13 gap-5">
@@ -37,10 +37,10 @@
                 </div>
             </div>
         </div>
-        <div class="header-main-img">
-            <img src="/img/backgroundImages/header-hero-image.jpg" alt="">
-            <div id="header-main-img-produtos">Produtos <br> <span style="color: #2863e6;">10k+</span></div>
-            <div id="header-main-img-vendedores">Vendedores <br> <span style="color: #f97415;">500+</span></div>
+        <div class="flex items-center justify-center">
+            <div class="hidden sm:block sm:w-1/3 lg:w-3/5 relative">
+                <img src="https://www.tailwind-kit.com/images/object/10.png" class="max-w-xs md:max-w-sm m-auto"/>
+            </div>
         </div>
     </section>
 </template>

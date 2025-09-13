@@ -44,4 +44,19 @@ export class MeusProdutosService {
       throw error;
     }
   }
+  async getAllProdutos(){
+    try{
+      const response = await axiosInstance.get("/produtos.json")
+      const produtos: { [key: string]: Produto } = response.data;
+      const produtosArray = Object.keys(produtos).map((id: string) => ({
+        ...produtos[id],
+        id: id
+      }))
+      console.log(produtosArray)
+      return produtosArray
+    }catch (error){
+      console.error("Erro ao buscar produtos:", error);
+      throw error;
+    }
+  }
 }

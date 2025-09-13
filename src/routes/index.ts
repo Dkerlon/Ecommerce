@@ -20,6 +20,12 @@ const routes = [
         path: '/sell',
         component: () => import('@/pages/SellPage.vue'),
         meta: { requiresAuth: true, onlySeller: true}
+    },
+    {
+        path: '/products/:id',
+        props: true,
+        component: () => import('@/pages/ProdutoPage.vue'),
+        meta: { requiresAuth: false, onlySeller: false}
     }
 ];
 
