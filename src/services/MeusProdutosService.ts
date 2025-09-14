@@ -1,6 +1,7 @@
 // services/ProdutoService.ts
 import axiosInstance from "@/config/axiosConfig";
 import { useAuthStore } from "@/store/auth";
+import type { AvaliacaoPayload } from "./AvaliacaoService";
 
 export interface Produto {
   categoria: string;
@@ -17,7 +18,7 @@ export interface Produto {
   quantidadeDisponivel: number;
   status: string;
   vendedorId: string;
-  avaliacoes?: any[];
+  avaliacoes?: Record<string, AvaliacaoPayload>;
   id?: string;
 }
 const store = useAuthStore();

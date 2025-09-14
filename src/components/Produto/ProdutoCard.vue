@@ -18,11 +18,11 @@
     <div class="flex flex-col mt-3">
       <label class="text-xs font-bold text-[#6c727f]" for="">{{ produto.categoria }}</label>
       <h5 class="font-bold text-md py-0.5">{{ produto.nome }}</h5>
-      <div class="stars relative w-32 h-6">
+      <div class="stars relative w-26 min-w-26 h-6">
         <div class="stars-empty absolute top-0 left-0 w-full h-full text-gray-300 text-2xl flex">★★★★★</div>
         <div class="stars-full absolute top-0 left-0 w-full h-full text-yellow-400 text-2xl flex overflow-hidden"
              :style="{ width: `${(ratingT / 5) * 100}%` }">★★★★★</div>
-        <span class="text-xs text-[#6c727f] absolute top-2.5 left-27">(2156)</span>
+        <span class="text-xs text-[#6c727f] absolute top-2.5 left-27">({{ avaliacoesCount }})</span>
       </div>
       <span class="text-xs text-[#6c727f] py-2">por {{ vendedorNome }}</span>
       <div class="flex items-center gap-2 ">
@@ -34,15 +34,25 @@
 </template>
 
 <script setup lang="ts">
+import type { AvaliacaoPayload } from '@/services/AvaliacaoService';
 import getUserInfoById from '@/services/getUserInfo/userInfoById';
 import type { Produto } from '@/services/MeusProdutosService';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 const props = defineProps<{
   fullWidth: boolean,
   produto: Produto
 }>()
 const vendedorNome = ref('')
-const ratingT = ref(0)
+const avaliacoesObj = ref(props.produto.avaliacoes)
+const avaliacoesArray = computed<AvaliacaoPayload[]>(() =>
+  Object.values(avaliacoesObj.value || {})
+);
+const avaliacoesCount = computed(() => avaliacoesArray.value.length);
+const ratingT = computed(() => {
+  if (avaliacoesArray.value.length === 0) return 0;
+  const soma = avaliacoesArray.value.reduce((acc, a) => acc + a.avaliacao, 0);
+  return soma / avaliacoesArray.value.length;
+});
 
 onMounted( async () => {
   const response = await getUserInfoById(String(props.produto.vendedorId))
