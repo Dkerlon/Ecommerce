@@ -4,6 +4,11 @@ import { useAuthStore } from "@/store/auth";
 
 const store = useAuthStore();
 
+export interface Especificacao{
+  nome: string,
+  descricao: string
+}
+
 export interface Produto {
   nome: string;
   descricao: string;
@@ -18,6 +23,7 @@ export interface Produto {
   status: string;
   fotos: string[];
   vendedorId: string;
+  especificacoes?: Especificacao[]
 }
 
 export class ProdutoHttpService {

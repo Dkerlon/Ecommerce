@@ -2,6 +2,7 @@
 import axiosInstance from "@/config/axiosConfig";
 import { useAuthStore } from "@/store/auth";
 import type { AvaliacaoPayload } from "./AvaliacaoService";
+import type { Especificacao } from "./AdicionarProdutoService";
 
 export interface Produto {
   categoria: string;
@@ -19,15 +20,17 @@ export interface Produto {
   status: string;
   vendedorId: string;
   avaliacoes?: Record<string, AvaliacaoPayload>;
+  especificacoes: Especificacao[]
   id?: string;
 }
 const store = useAuthStore();
 export class MeusProdutosService {
 
   private userId: string | null;
-
+  private userToken: string | null;
   constructor() {
     this.userId = store.getlocalId || null;
+    this.userToken = store.isLoggedIn
   }
 
   async getProdutosByVendedor() {
@@ -68,6 +71,15 @@ export class MeusProdutosService {
       return produto
     }catch (error){
       console.error("Erro ao buscar produto:", error);
+      throw error;
+    }
+  }
+  async atualizarProduto(id: string, payload:Produto){
+    try{
+      const response = await axiosInstance.patch(`/produtos/${id}.json?auth=${this.userToken}`, payload)
+      return response.data
+    }catch (error){
+      console.error("Erro ao editar produto:", error);
       throw error;
     }
   }

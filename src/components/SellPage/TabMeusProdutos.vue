@@ -34,7 +34,7 @@
           <td colspan="2">
             <div class="action-td flex items-center gap-5 justify-end">
               <img class="w-4 hover:opacity-80" src="/img/icons/view-on.png" alt=""/>
-              <img class="w-4 hover:opacity-80" src="/img/icons/editar.png" alt=""/>
+              <img @click="openModal(produto)" class="w-4 hover:opacity-80" src="/img/icons/editar.png" alt=""/>
               <img class="w-4 hover:opacity-80" src="/img/icons/lixeira.png" alt=""/>
             </div>
           </td>
@@ -42,6 +42,7 @@
       </tbody>
     </table>
   </main-container>
+  <ModalAtualizarProduto v-if="modalOPen" :produto="produtoModal" @close="modalOPen = false" :isOpen="modalOPen"/>
 </template>
 
 <script setup lang="ts">
@@ -49,11 +50,21 @@ import { onMounted, ref } from 'vue';
 import MainContainer from '../UI/Container/MainContainer.vue';
 import { MeusProdutosService } from '@/services/MeusProdutosService';
 import type { Produto } from '@/services/MeusProdutosService';
+import ModalAtualizarProduto from '../UI/Modais/ModalAtualizarProduto.vue';
 const produtos = ref<Produto[]>([])
+const modalOPen = ref(false)
+const produtoModal = ref<Produto>({} as Produto)
+
+function openModal(produto: Produto){
+  modalOPen.value = true
+  produtoModal.value = produto
+}
+
 onMounted( async () => {
   produtos.value = await new MeusProdutosService().getProdutosByVendedor()
   console.log(produtos.value)
 })
+
 </script>
 <style scoped>
 .bordaCard{

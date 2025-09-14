@@ -14,7 +14,7 @@
       <div>
         <div class="flex gap-5 mb-2">
           <div class="badge bg-orange-500 text-white py-4 px-2">{{ produto.categoria }}</div>
-          <div v-if="produto.preco.emPromocao" class="badge bg-blue-600 text-white py-4 px-2">-{{ produto.preco.percentualDesconto }} OFF</div>
+          <div v-if="produto.preco.emPromocao" class="badge bg-blue-600 text-white py-4 px-2">-{{ produto.preco.percentualDesconto }}% OFF</div>
         </div>
         <h2 class="font-bold text-xl">{{ produto.nome }}</h2>
         <div class="flex items-center gap-2 mb-2">
@@ -32,29 +32,17 @@
         <h3 class="font-bold text-2xl text-green-600">R$ {{ produto.preco.atual.toFixed(2) }}</h3>
         <h4 v-if="produto.preco.emPromocao" class="font-bold text-sm text-[#6c727f]"><del>R$ {{ produto.preco.original.toFixed(2) }}</del></h4>
       </div>
-      <span v-if="produto.preco.emPromocao" class="text-xs text-green-600">Você economizou RS {{ (produto.preco.atual - produto.preco.original).toFixed(2) }}</span>
+      <span v-if="produto.preco.emPromocao" class="text-xs text-green-600">Você economizará R$ {{ (produto.preco.atual - produto.preco.original).toFixed(2) }}</span>
       <div class="mb-4">
         <h5 class="text-sm font-bold my-2"><b>Descrição</b></h5>
         <p class="text-sm text-[#6c727f]">{{ produto.descricao }}</p>
       </div>
-      <TheCard class="mb-10" style="padding: 0; border: none;">
+      <TheCard class="mb-10" style="padding: 0; border: none;" v-if="produto.especificacoes">
         <h5 class="font-bold text-sm my-2">Especificações</h5>
         <div class="border border-[#e5e7eb] rounded-xl p-3">
-          <div class="flex items-center justify-between">
-            <span class="text-sm font-bold">Nome:</span>
-            <span class="text-sm text-[#6c727f]">Descrição</span>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-sm font-bold">Nome:</span>
-            <span class="text-sm text-[#6c727f]">Descrição</span>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-sm font-bold">Nome:</span>
-            <span class="text-sm text-[#6c727f]">Descrição</span>
-          </div>
-          <div class="flex items-center justify-between">
-            <span class="text-sm font-bold">Nome:</span>
-            <span class="text-sm text-[#6c727f]">Descrição</span>
+          <div class="flex items-center justify-between" v-for="(especificacao,index) in produto.especificacoes" :key="index">
+            <span class="text-sm font-bold">{{ especificacao.nome }}:</span>
+            <span class="text-sm text-[#6c727f]">{{ especificacao.descricao }}</span>
           </div>
         </div>
       </TheCard>
@@ -62,7 +50,7 @@
         <span class="text-sm font-bold">Quantidade</span>
         <div class="flex items-center gap-4 border border-[#e5e7eb] px-3 py-1 rounded-md">
           <span class="border-r border-[#e5e7eb] pr-3 hover:opacity-60 cursor-pointer text-sm">-</span>
-          <span class="border-r border-[#e5e7eb] pr-3 text-sm">{{ produto.quantidadeDisponivel }}</span>
+          <span class="border-r border-[#e5e7eb] pr-3 text-sm">1</span>
           <span class="hover:opacity-60 cursor-pointer text-sm">+</span>
         </div>
       </div>

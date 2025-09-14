@@ -10,8 +10,8 @@
        hover:bg-amber-700 transition-all duration-500 ease-in-out transform translate-y-5 group-hover:translate-y-0">
         Adicionar ao carrinho
       </button>
-        <span v-if="produto.preco.emPromocao" class="bg-red-500 hover:bg-blue-400 transition-all duration-500 ease-in-out p-1 text-xs rounded-xl text-white absolute top-2 left-2">-30%</span>
-        <div class="bg-gray-400 hover:bg-gray-300 p-1 absolute top-2 right-5 rounded-xl transition-all duration-500 ease-in-out">
+        <span id="promo-span" v-if="produto.preco.emPromocao" class="bg-red-500 hover:bg-blue-400 flex items-center justify-center text-sm p-1 rounded-xl text-white absolute top-4 left-2">-{{ produto.preco.percentualDesconto }}%</span>
+        <div class="bg-gray-400 hover:bg-gray-300 p-1 absolute top-4 right-1 rounded-xl transition-all duration-500 ease-in-out">
           <img class="w-5 invert brightness-200" src="/public/img/icons/favorite.png" alt="">
         </div>
     </div>
@@ -26,8 +26,8 @@
       </div>
       <span class="text-xs text-[#6c727f] py-2">por {{ vendedorNome }}</span>
       <div class="flex items-center gap-2 ">
-        <span class="text-[#16a249] font-bold">R$ {{ produto.preco.atual }}</span>
-        <span v-if="produto.preco.emPromocao" class="text-[#6c727f] text-xs"><del>R$ {{ produto.preco.original }}</del></span>
+        <span class="text-[#16a249] font-bold">R$ {{ produto.preco.atual.toFixed(2) }}</span>
+        <span v-if="produto.preco.emPromocao" class="text-[#6c727f] text-xs"><del>R$ {{ produto.preco.original.toFixed(2) }}</del></span>
       </div>
     </div>
   </div>
