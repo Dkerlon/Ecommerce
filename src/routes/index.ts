@@ -25,6 +25,11 @@ const routes = [
         path: '/products/:id',
         component: () => import('@/pages/ProdutoPage.vue'),
         meta: { requiresAuth: false, onlySeller: false}
+    },
+    {
+        path: '/cart/',
+        component: () => import('@/pages/CartPage.vue'),
+        meta: { requiresAuth: true, onlySeller: false}
     }
 ];
 

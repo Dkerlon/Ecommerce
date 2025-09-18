@@ -10,7 +10,7 @@
             <InputSearch place-holder="Buscar Produtos..."></InputSearch>
             <div class="icons">
                 <img src="/img/icons/favorite.png" alt="">
-                <img src="/img/icons/cart.png" alt="">
+                <img @click="router.push('/cart')" src="/img/icons/cart.png" alt="">
             </div>
             <div class="actions">
                 <div class="actions">
