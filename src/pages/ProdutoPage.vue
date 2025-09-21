@@ -49,13 +49,13 @@
       <div class="flex items-center gap-2 my-4">
         <span class="text-sm font-bold">Quantidade</span>
         <div class="flex items-center gap-4 border border-[#e5e7eb] px-3 py-1 rounded-md">
-          <span class="border-r border-[#e5e7eb] pr-3 hover:opacity-60 cursor-pointer text-sm">-</span>
-          <span class="border-r border-[#e5e7eb] pr-3 text-sm">1</span>
-          <span class="hover:opacity-60 cursor-pointer text-sm">+</span>
+          <span class="border-r border-[#e5e7eb] pr-3 hover:opacity-60 cursor-pointer text-sm" @click="quantidade--">-</span>
+          <span class="border-r border-[#e5e7eb] pr-3 text-sm">{{ quantidade }}</span>
+          <span @click="quantidade++" class="hover:opacity-60 cursor-pointer text-sm">+</span>
         </div>
       </div>
       <div class="flex mb-4 gap-3">
-        <ButtonFullFilled class="w-full" text="Adicionar ao carrinho">
+        <ButtonFullFilled @click="addToCart" class="w-full" text="Adicionar ao carrinho">
           <template #img-start>
             <div class="flex items-center  justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
@@ -193,10 +193,12 @@ import ModalAvaliacao from '@/components/UI/Modais/ModalAvaliacao.vue';
 import { useAuthStore } from '@/store/auth';
 import { useRoute } from 'vue-router';
 import { AvaliacaoService, type AvaliacaoPayload } from '@/services/AvaliacaoService';
+import { carrinhoService } from '@/services/AdicionarAoCarrinho';
 const store = useAuthStore()
 const route = useRoute()
 const produtoService = new MeusProdutosService
 let produto = reactive<Produto>({} as Produto)
+const quantidade = ref(1)
 let vendedorInfo = reactive<userInfo>({} as userInfo)
 const isLoading = ref(true)
 const avaliacoesObj = ref<Record<string, AvaliacaoPayload>>({});
@@ -240,6 +242,10 @@ async function getProdutoAvaliacoes() {
   }catch{
     alert('ERRO AO BUSCAR AVALIACOES')
   }
+}
+
+function addToCart() {
+  carrinhoService.adicionarAoCarrinho(produto.id!, quantidade.value);
 }
 
 onMounted( async () => {

@@ -12,7 +12,6 @@ const axiosInstance = axios.create({
 // Interceptors para logs ou tratamento de erros global
 axiosInstance.interceptors.response.use(
   function (response) {
-    console.log(response)
     return response
   },
   error => {

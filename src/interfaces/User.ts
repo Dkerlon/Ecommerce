@@ -1,10 +1,5 @@
-interface carrinho {
-  produtoId: string,
-  quantidade: number
-}
-
 export interface userInfo {
-  carrinho: carrinho[],
+  carrinho: Record<string, number>,
   email: string,
   favoritos: string[],
   localId: string,

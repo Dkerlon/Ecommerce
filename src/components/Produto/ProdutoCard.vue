@@ -6,6 +6,7 @@
         :style="{ backgroundImage: `url(${produto.fotos[0]})`, height: fullWidth ? '100%' : '280px' }"
       >
       <button
+        @click="addToCart"
         class="bg-[#f97316] opacity-0 group-hover:opacity-100 rounded-md text-white w-full py-2 px-2 text-sm font-semibold cursor-pointer
        hover:bg-amber-700 transition-all duration-500 ease-in-out transform translate-y-5 group-hover:translate-y-0">
         Adicionar ao carrinho
@@ -38,6 +39,8 @@ import type { AvaliacaoPayload } from '@/services/AvaliacaoService';
 import getUserInfoById from '@/services/getUserInfo/userInfoById';
 import type { Produto } from '@/services/MeusProdutosService';
 import { computed, onMounted, ref } from 'vue';
+import { carrinhoService } from '@/services/AdicionarAoCarrinho';
+
 const props = defineProps<{
   fullWidth: boolean,
   produto: Produto
@@ -54,14 +57,15 @@ const ratingT = computed(() => {
   return soma / avaliacoesArray.value.length;
 });
 
+
+function addToCart() {
+  carrinhoService.adicionarAoCarrinho(props.produto.id!, 1);
+}
 onMounted( async () => {
   const response = await getUserInfoById(String(props.produto.vendedorId))
-  vendedorNome.value = response.nome
-  let avaliacoes = 0
-  for(const avaliacao in response.avaliacoes.nota){
-    avaliacoes += Number(avaliacao)
-  }
-  ratingT.value = avaliacoes / response.avaliacoes.length
+  if(response){
+    vendedorNome.value = response.nome
+    }
 })
 </script>
 
