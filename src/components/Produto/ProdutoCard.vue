@@ -1,9 +1,9 @@
 <template>
-  <div @click="$router.push('/products/' + produto.id)" :class="['items-center justify-center', fullWidth ? 'w-full' : 'md:w-[45%] xl:w-[20%]']">
+  <div @click="$router.push('/products/' + produto.id)" class="items-center justify-center md:w-[45%] xl:w-[20%]">
       <div
         class="img-produto group flex items-end justify-center p-3 hover:scale-101 hover:cursor-pointer overflow-hidden
               bg-cover bg-center rounded-xl transition-all duration-500 relative ease-in-out"
-        :style="{ backgroundImage: `url(${produto.fotos[0]})`, height: fullWidth ? '100%' : '280px' }"
+        :style="{ backgroundImage: `url(${produto.fotos[0]})`, height: '280px'}"
       >
       <button
         @click="addToCart"
@@ -39,10 +39,9 @@ import type { AvaliacaoPayload } from '@/services/AvaliacaoService';
 import getUserInfoById from '@/services/getUserInfo/userInfoById';
 import type { Produto } from '@/services/MeusProdutosService';
 import { computed, onMounted, ref } from 'vue';
-import { carrinhoService } from '@/services/AdicionarAoCarrinho';
+import { carrinhoService } from '@/services/Carrinho';
 
 const props = defineProps<{
-  fullWidth: boolean,
   produto: Produto
 }>()
 const vendedorNome = ref('')

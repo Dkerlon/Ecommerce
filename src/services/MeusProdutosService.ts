@@ -5,6 +5,7 @@ import type { AvaliacaoPayload } from "./AvaliacaoService";
 import type { Especificacao } from "./AdicionarProdutoService";
 
 export interface Produto {
+  [key: string]: any
   categoria: string;
   criadoEm: string;
   descricao: string;

@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="m-auto">
     <!-- Barra de busca e layout -->
     <div class="filters">
       <InputSearch
@@ -12,14 +12,9 @@
         <img src="/img/icons/filter.png" alt="">
         <span>Filtros</span>
       </div>
-
-      <div class="changeLayout">
-        <div @click="layoutRow = false" class="img-div"><img src="/img/icons/grid.png" alt=""></div>
-        <div @click="layoutRow = true" class="img-div"><img src="/img/icons/lista.png" alt=""></div>
-      </div>
     </div>
 
-    <section class="flex gap-10">
+    <section class="flex gap-10 my-4">
       <!-- Coluna de filtros -->
       <div v-if="showFilters" class="flex gap-5 flex-col w-[50%] max-w-[300px]">
 
@@ -72,7 +67,6 @@
             v-for="produto in produtosFiltrados"
             :key="produto.id || produto.nome"
             :produto="produto"
-            :full-width="layoutRow"
           />
           <div v-if="produtosFiltrados.length === 0" class="py-10 text-red-500">
             <p>Nenhum produto encontrado...</p>
@@ -90,13 +84,14 @@ import TheCard from '../Container/TheCard.vue';
 import TheSlider from '../Inputs/TheSlider.vue';
 import ProdutoCard from '@/components/Produto/ProdutoCard.vue';
 import { MeusProdutosService, type Produto } from '@/services/MeusProdutosService';
+import type { AvaliacaoPayload } from '@/services/AvaliacaoService';
 
 const MeusProdutosServiceInstance = new MeusProdutosService();
 
 // Opções
 
 const categoriasOp = [
-  { value: 'Eletrônico', label: 'Eletrônico' },
+  { value: 'Eletrônicos', label: 'Eletrônico' },
   { value: 'Roupas', label: 'Roupas' },
   { value: 'Livros', label: 'Livros' },
   { value: 'Móveis', label: 'Móveis' },
@@ -106,7 +101,6 @@ const categoriasOp = [
 
 // Estados
 const showFilters = ref(true);
-const layoutRow = ref(false);
 const preco = ref(5000);
 const searchTerm = ref('');
 const categoriasSelecionadas = ref<string[]>([]);
@@ -115,8 +109,23 @@ const apenasEstoque = ref(false);
 
 const produtos = ref<Produto[]>([]);
 
+function computeAverageRating(avaliacoes?: Record<string, AvaliacaoPayload>): number {
+  if (!avaliacoes) return 0
+  const values = Object.values(avaliacoes)
+  if (values.length === 0) return 0
+
+  const soma = values.reduce((acc, v) => acc + v.avaliacao, 0)
+  return soma / values.length
+}
+
+
 onMounted(async () => {
   produtos.value = await MeusProdutosServiceInstance.getAllProdutos();
+  const raw = await MeusProdutosServiceInstance.getAllProdutos()
+  produtos.value = raw.map(p => ({
+    ...p,
+    avgRating: computeAverageRating(p.avaliacoes)
+  }))
 });
 
 const produtosFiltrados = computed(() => {
@@ -134,13 +143,13 @@ const produtosFiltrados = computed(() => {
         !categoriasSelecionadas.value.includes(p.categoria)) return false;
     if (p.preco.atual > preco.value) return false;
 
+    // filtro por avaliação
     if (avaliacaoSelecionada.value.length > 0) {
-      const avaliacaoMedia = p.avaliacoes?.reduce((a,b)=>a+b,0)/ (p.avaliacoes?.length||1) || 0;
-      const maxAvaliacaoFiltro = Math.max(...avaliacaoSelecionada.value);
-      if (avaliacaoMedia < maxAvaliacaoFiltro) return false;
+      const minFiltro = Math.min(...avaliacaoSelecionada.value)
+      if ((p.avgRating ?? 0) < minFiltro) return false
     }
 
-    if (apenasEstoque.value && p.quantidadeDisponivel <= 0) return false;
+    if (apenasEstoque.value && (p.quantidadeDisponivel <= 0 || p.status !== 'ativo')) return false;
 
     return true;
   });
@@ -151,7 +160,6 @@ const produtosFiltrados = computed(() => {
 <style scoped>
 main{
     width: 90%;
-    margin: 0 auto;
 }
 
 .filters{

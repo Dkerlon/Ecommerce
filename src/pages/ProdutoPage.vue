@@ -55,7 +55,7 @@
         </div>
       </div>
       <div class="flex mb-4 gap-3">
-        <ButtonFullFilled @click="addToCart" class="w-full" text="Adicionar ao carrinho">
+        <ButtonFullFilled @click="addToCart(route.params.id)" class="w-full" text="Adicionar ao carrinho">
           <template #img-start>
             <div class="flex items-center  justify-center">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
@@ -161,10 +161,10 @@
       <div class="badge bg-green-100 text-green-700 py-3 px-2 text-xs">Compra Verificada</div>
     </div>
     <div class="flex gap-2 items-center">
-      <div class="stars relative w-26 min-w-26 h-6 mb-2">
+      <div class="stars relative w-22 h-6 mb-2">
         <div class="stars-empty absolute top-0 left-0 w-full h-full text-gray-300 text-xl flex">★★★★★</div>
         <div class="stars-full absolute top-0 left-0 w-full h-full text-yellow-400 text-xl flex overflow-hidden"
-            :style="{ width: `${(avaliacao.avaliacao / 5) * 100}%` }">★★★★★</div>
+            :style="{ width: `${Math.ceil(((avaliacao.avaliacao / 5) * 100))}%` }">★★★★★</div>
       </div>
       <span class="text-xs text-[#6c727f]">{{ avaliacao.data }}</span>
     </div>
@@ -193,7 +193,7 @@ import ModalAvaliacao from '@/components/UI/Modais/ModalAvaliacao.vue';
 import { useAuthStore } from '@/store/auth';
 import { useRoute } from 'vue-router';
 import { AvaliacaoService, type AvaliacaoPayload } from '@/services/AvaliacaoService';
-import { carrinhoService } from '@/services/AdicionarAoCarrinho';
+import { carrinhoService } from '@/services/Carrinho';
 const store = useAuthStore()
 const route = useRoute()
 const produtoService = new MeusProdutosService
@@ -244,8 +244,9 @@ async function getProdutoAvaliacoes() {
   }
 }
 
-function addToCart() {
-  carrinhoService.adicionarAoCarrinho(produto.id!, quantidade.value);
+function addToCart(id: string) {
+  console.log(id)
+  carrinhoService.adicionarAoCarrinho(id, quantidade.value);
 }
 
 onMounted( async () => {
