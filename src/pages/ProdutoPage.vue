@@ -194,6 +194,7 @@ import { useAuthStore } from '@/store/auth';
 import { useRoute } from 'vue-router';
 import { AvaliacaoService, type AvaliacaoPayload } from '@/services/AvaliacaoService';
 import { carrinhoService } from '@/services/Carrinho';
+import { useUserInfo } from '@/store/userInfo';
 const store = useAuthStore()
 const route = useRoute()
 const produtoService = new MeusProdutosService
@@ -245,7 +246,6 @@ async function getProdutoAvaliacoes() {
 }
 
 function addToCart(id: string) {
-  console.log(id)
   carrinhoService.adicionarAoCarrinho(id, quantidade.value);
 }
 

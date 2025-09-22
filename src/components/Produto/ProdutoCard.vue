@@ -40,7 +40,7 @@ import getUserInfoById from '@/services/getUserInfo/userInfoById';
 import type { Produto } from '@/services/MeusProdutosService';
 import { computed, onMounted, ref } from 'vue';
 import { carrinhoService } from '@/services/Carrinho';
-
+import { useUserInfo } from '@/store/userInfo';
 const props = defineProps<{
   produto: Produto
 }>()
@@ -73,4 +73,30 @@ onMounted( async () => {
   opacity: 1;
   translate: 0px 0px;
 }
+
+/*
+
+const numeroItensCarrinho = useUserInfo().getCarrinho.length
+
+<div class="icons relative">
+  <img src="/img/icons/favorite.png" alt="">
+
+  <div class="relative inline-block">
+    <img
+      @click="router.push('/cart')"
+      src="/img/icons/cart.png"
+      alt="carrinho ícone"
+      class="cursor-pointer"
+    />
+    <span
+      v-if="numeroItensCarrinho > 0"
+      class="absolute -top-2 -right-4 bg-red-600 text-white text-xs font-bold rounded-full min-w-[20px] h-[20px] flex items-center justify-center"
+    >
+      {{ numeroItensCarrinho }}
+    </span>
+  </div>
+</div>
+ */
 </style>
+
+

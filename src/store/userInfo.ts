@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { carrinhoService } from "@/services/Carrinho";
 
 export const useUserInfo = defineStore('userInfo', {
   state: () => {
@@ -14,14 +15,23 @@ export const useUserInfo = defineStore('userInfo', {
   getters:{
     getTipoConta: (state) => {
       return state.tipoConta
-    }
+    },
+    getCarrinho: (state => {
+      return state.carrinho
+    })
   },
   actions: {
     setUserInfo(userInfo){
       this.email = userInfo.email
       this.nome = userInfo.nome
-      this.carrinho = userInfo.produtos || []
+      console.log(this.carrinho)
+      this.carrinho = Object.entries(userInfo.carrinho || [])
       this.tipoConta = userInfo.tipoConta
+    },
+    async setUserCarrinho(){
+      const response = await carrinhoService.getItensCarrinho()
+      console.log(response)
+      this.carrinho = Object.entries(response.data || [])
     }
   }
 })
