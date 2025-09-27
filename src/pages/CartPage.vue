@@ -8,9 +8,12 @@
       <section class="w-2/3">
         <header class="flex justify-between items-center mb-2">
           <h3 class="font-bold text-1xl">Carrinho de Compras</h3>
-          <div class="badge badge-sm border-[#e5e7eb]">{{ carrinhoItens.length }} Itens</div>
+          <div>
+            <div class="badge badge-sm border-[#e5e7eb]">{{ carrinhoItens.length }} Itens</div>
+            <div class="badge badge-sm border-[#e5e7eb] ml-2">{{ carrinhoStore.carrinhoItensSelecionados.length }} Itens Selecionados</div>
+          </div>
         </header>
-        <ProdutoCardCart v-for="item in carrinhoItens" :key="item.id" :item="item" @atualizarQuantidade="atualizarQuantidade" @deletarItemCarrinho="deletarItemCarrinho"/>
+        <ProdutoCardCart @click="selecionarDesmarcarItem(item.id!)" v-for="item in carrinhoItens" :key="item.id" :item="item" @atualizarQuantidade="atualizarQuantidade" @deletarItemCarrinho="deletarItemCarrinho" :class="{'bg-blue-100': carrinhoStore.carrinhoItensSelecionados.includes(item.id!)}"/>
       </section>
       <section>
         <div class="w-[350px] h-[290px] bg-[#e5e7eb] rounded-lg p-4 flex flex-col justify-between">
@@ -27,7 +30,7 @@
             <span class="text-sm text-[#6c727f]">Total</span>
             <span class="font-bold text-green-500">R$ {{ total.toFixed(2) }}</span>
           </div>
-          <ButtonFullFilled text="Finalizar Compra"/>
+          <ButtonFullFilled @click="$router.push('/payPage')" text="Finalizar Compra"/>
           <div class="flex flex-col gap-1 mt-2">
             <span class="text-[#6c727f] text-xs flex items-center gap-2"> <img src="/img/icons/check.svg" alt=""> Compra 100% segura</span>
             <span class="text-[#6c727f] text-xs flex items-center gap-2"> <img src="/img/icons/check.svg" alt=""> Devolução Grátis em 30 dias</span>
@@ -55,14 +58,18 @@ import { useAuthStore } from '@/store/auth';
 import { computed, onMounted, ref } from 'vue';
 import type { userInfo } from '@/interfaces/User';
 import { carrinhoService } from '@/services/Carrinho';
+import useCarrinhoStore from '@/store/Carrinho';
 const produtosService = new MeusProdutosService()
 const store = useAuthStore()
 const carrinhoItens = ref<Produto[]>([])
+const carrinhoStore = useCarrinhoStore()
 const isLoading = ref(true)
 const subTotal = computed(() => {
   let total = 0
   for(const item of carrinhoItens.value){
-    total+= item.preco.atual * item.quantidade
+    if(carrinhoStore.carrinhoItensSelecionados.includes(item.id!)){
+      total+= item.preco.atual * item.quantidade
+    }
   }
   return total
 })
@@ -119,6 +126,17 @@ function deletarItemCarrinho(id: string) {
     console.error('Erro ao deletar do banco', err)
     getProdutosCarrinho()
   })
+}
+
+function selecionarDesmarcarItem(id: string) {
+  const index = carrinhoStore.carrinhoItensSelecionados.indexOf(id);
+  if (index === -1) {
+    carrinhoStore.adicionarItemSelecionado(id);
+  } else {
+    carrinhoStore.removerItemSelecionado(id);
+  }
+
+  console.log(carrinhoStore.carrinhoItensSelecionados);
 }
 
 onMounted(() => {

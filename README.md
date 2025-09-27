@@ -1,3 +1,11 @@
+# todo list
+
+- Implementar Funcionalidade de Vendas e consumir os dados
+- Adicionar loading e tratamento de erro em todas as requisições
+- Adicionar tela/ funcionalidade de favoritos
+- Adicionar sistema de armazenamento de fotos
+
+
 # ecommerce
 
 This template should help get you started developing with Vue 3 in Vite.

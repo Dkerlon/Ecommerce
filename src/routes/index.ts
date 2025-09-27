@@ -30,6 +30,11 @@ const routes = [
         path: '/cart/',
         component: () => import('@/pages/CartPage.vue'),
         meta: { requiresAuth: true, onlySeller: false}
+    },
+    {
+        path: '/payPage/',
+        component: () => import('@/pages/PayPage.vue'),
+        meta: { requiresAuth: true, onlySeller: false}
     }
 ];
 
