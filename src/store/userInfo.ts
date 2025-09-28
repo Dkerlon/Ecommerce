@@ -5,7 +5,7 @@ export const useUserInfo = defineStore('userInfo', {
   state: () => {
     return {
       email: '',
-      nome: 'Kerlon Brito de Aragão',
+      nome: '',
       carrinho: [],
       favoritos:[],
       notificacoes:[],
@@ -24,7 +24,6 @@ export const useUserInfo = defineStore('userInfo', {
     setUserInfo(userInfo){
       this.email = userInfo.email
       this.nome = userInfo.nome
-      console.log(this.carrinho)
       this.carrinho = Object.entries(userInfo.carrinho || [])
       this.tipoConta = userInfo.tipoConta
     },

@@ -19,10 +19,10 @@ export const useAuthStore = defineStore("auth", {
     },
   },
   actions:{
-    setUser(user: CreateUserResponse, remeber: boolean) {
+    setUser(user: CreateUserResponse, remember: boolean) {
       this.idToken = user.idToken
       this.localId = user.localId
-      if(remeber){
+      if(remember){
         localStorage.setItem("token", this.idToken)
         localStorage.setItem("localId", this.localId)
       }
@@ -36,7 +36,7 @@ export const useAuthStore = defineStore("auth", {
     async createAccout(userData: signInSingInterface){
       const response = await signUp(userData)
       if(response && !response.error){
-        this.setUser(response)
+        this.setUser(response, true)
         return response
       }
     },
