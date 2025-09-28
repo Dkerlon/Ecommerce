@@ -13,24 +13,24 @@ lerna-debug.log*
 # =============================
 # Dependências
 # =============================
-node_modules
+node_modules/
 
 # =============================
-# Build
+# Build / Testes
 # =============================
-dist
-dist-ssr
-coverage
+dist/
+dist-ssr/
+coverage/
 
 # =============================
-# Arquivos locais
+# Arquivos locais / temporários
 # =============================
 *.local
 .DS_Store
 *.tsbuildinfo
 
 # =============================
-# Cypress (testes)
+# Cypress (testes e2e)
 # =============================
 /cypress/videos/
 /cypress/screenshots/
@@ -40,7 +40,7 @@ coverage
 # =============================
 .vscode/*
 !.vscode/extensions.json
-.idea
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
@@ -51,14 +51,16 @@ coverage
 # Variáveis de ambiente
 # =============================
 .env
-.env.production
+.env.*.local
+.env.local
 .env.development
+.env.production
 .env.d.ts
 
 # =============================
 # Firebase
 # =============================
-.firebase
+.firebase/
 .firebaserc
 .firebase.json
 ```
