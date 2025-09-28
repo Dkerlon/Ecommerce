@@ -3,7 +3,7 @@ import { useAuthStore } from "@/store/auth";
 
 export const carrinhoService = {
   async adicionarAoCarrinho(idProduto: string, quantidade: number) {
-    const store = useAuthStore(); // <- só inicializa quando o método é chamado
+    const store = useAuthStore();
     try {
       const response = await axiosInstance.put(
         `/users/${store.getlocalId}/carrinho/${idProduto}.json?auth=${store.isLoggedIn}`,

@@ -58,7 +58,7 @@
       </div>
 
       <!-- Lista de produtos -->
-      <div class="h-500 w-full">
+      <div class="w-full" id="lista-produtos">
         <h3 class="pt-5 font-black text-2xl">Produtos em Destaque</h3>
         <p class="text-[#6c727f] text-sm py-1">{{ produtosFiltrados.length }} produtos encontrados</p>
 
