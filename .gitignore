@@ -32,7 +32,8 @@ coverage
 .env
 .env.production
 .env.development
+.env.d.ts
 .firebase
-.firebaseerc
+.firebaserc
 .firebase.json
 yes
