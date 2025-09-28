@@ -1,6 +1,7 @@
 import { setUserInfo } from "@/services/setUserInfo";
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserInfo } from "@/store/userInfo";
+import { useAuthStore } from "@/store/auth";
 const routes = [
     {
         path:'/',
@@ -49,7 +50,7 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to,from,next) => {
-    const isLogged = localStorage.getItem("token")
+    const isLogged = useAuthStore().isLoggedIn
     await setUserInfo()
     const userInfo = useUserInfo()
 
