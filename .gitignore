@@ -1,4 +1,7 @@
+```gitignore
+# =============================
 # Logs
+# =============================
 logs
 *.log
 npm-debug.log*
@@ -7,17 +10,34 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# =============================
+# Dependências
+# =============================
 node_modules
-.DS_Store
+
+# =============================
+# Build
+# =============================
 dist
 dist-ssr
 coverage
-*.local
 
+# =============================
+# Arquivos locais
+# =============================
+*.local
+.DS_Store
+*.tsbuildinfo
+
+# =============================
+# Cypress (testes)
+# =============================
 /cypress/videos/
 /cypress/screenshots/
 
-# Editor directories and files
+# =============================
+# Configurações de IDE/Editor
+# =============================
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -27,13 +47,18 @@ coverage
 *.sln
 *.sw?
 
-*.tsbuildinfo
-
+# =============================
+# Variáveis de ambiente
+# =============================
 .env
 .env.production
 .env.development
 .env.d.ts
+
+# =============================
+# Firebase
+# =============================
 .firebase
 .firebaserc
 .firebase.json
-yes
+```
