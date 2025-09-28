@@ -1,47 +1,106 @@
-# todo list
+# 📦 Projeto E-commerce em Vue.js
 
-- Implementar Funcionalidade de Vendas e consumir os dados
-- Adicionar loading e tratamento de erro em todas as requisições
-- Adicionar tela/ funcionalidade de favoritos
-- Adicionar sistema de armazenamento de fotos
+## 🚀 Tecnologias utilizadas
 
+* **Vue.js** – Framework principal para construção da interface.
+* **Pinia** – Gerenciamento de estado global.
+* **Vue Router** – Controle das rotas e navegação.
+* **Tailwind CSS** – Estilização com utilitários CSS.
+* **Firebase** – Utilizado para autenticação e banco de dados em tempo real.
 
-# ecommerce
+---
 
-This template should help get you started developing with Vue 3 in Vite.
+## 👥 Tipos de usuários
 
-## Recommended IDE Setup
+O sistema possui dois tipos principais de usuários:
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+* **Comprador**
 
-## Type Support for `.vue` Imports in TS
+  * Visualiza produtos disponíveis.
+  * Adiciona e remove itens do carrinho.
+  * Realiza compras.
+  * Avalia produtos comprados.
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) to make the TypeScript language service aware of `.vue` types.
+* **Vendedor**
 
-## Customize configuration
+  * Cadastra novos produtos.
+  * Exclui seus próprios produtos.
+  * Possui também todas as funcionalidades de um comprador.
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+---
 
-## Project Setup
+## ⚙️ Funcionalidades principais
 
-```sh
+* **Autenticação Firebase**: cadastro, login e controle de sessão.
+* **Exposição de produtos**: vendedores podem criar e gerenciar produtos.
+* **Listagem de produtos**: todos os usuários podem visualizar os produtos disponíveis.
+* **Carrinho de compras**: cada usuário pode adicionar, remover e visualizar itens.
+* **Compras**: fluxo de compra integrado, mas nada visual.
+* **Avaliações**: compradores podem avaliar os produtos adquiridos.
+
+---
+
+## 📂 Estrutura do projeto
+
+```bash
+src/
+ ├─ components/    # Componentes reutilizáveis
+ ├─ pages/         # Páginas principais
+ ├─ router/        # Configuração de rotas com Vue Router
+ ├─ store/         # Pinia (estado global)
+ ├─ config/        # Configurações (ex: axios, firebase)
+ └─ App.vue        # Componente raiz
+ └─ Services       # Funções e Classes para requisições https 
+```
+
+---
+
+## 🛠️ Instalação e execução
+
+```bash
+# Clonar o repositório
+git clone <url-do-repo>
+
+# Entrar na pasta
+cd ecommerce-vue
+
+# Instalar dependências
 npm install
-```
 
-### Compile and Hot-Reload for Development
-
-```sh
+# Rodar em ambiente de desenvolvimento
 npm run dev
-```
 
-### Type-Check, Compile and Minify for Production
-
-```sh
+# Build para produção
 npm run build
 ```
 
-### Lint with [ESLint](https://eslint.org/)
+---
 
-```sh
-npm run lint
+## 🔐 Configuração do Firebase
+
+Antes de rodar o projeto, crie um projeto no [Firebase](https://firebase.google.com/), habilite:
+
+* Autenticação (e-mail/senha ou outro provedor)
+* Firestore Realtime Database
+
+Crie um arquivo `.env` com suas chaves do Firebase:
+
+```env
+VITE_API_KEY=xxxxxx
 ```
+
+---
+
+## 📌 Roadmap / Possíveis melhorias
+
+* Integração com sistema de pagamento.
+* Upload de imagens para produtos.
+* Sistema de Chat e Visualização das compras feitas
+* Notificações em tempo real para vendedores (novas compras).
+* Refatorar estrutura do projeto e desacoplar intefaces de services
+
+---
+
+## 👨‍💻 Autor
+
+Desenvolvido por **Kerlon Aragão** 🧑‍💻
