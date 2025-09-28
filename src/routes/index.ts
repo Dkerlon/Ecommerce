@@ -35,6 +35,11 @@ const routes = [
         path: '/payPage/',
         component: () => import('@/pages/PayPage.vue'),
         meta: { requiresAuth: true, onlySeller: false}
+    },
+    {
+        path: '/order:id',
+        component: () => import('@/pages/OrderPage.vue'),
+        meta: { requiresAuth: true, onlySeller: false}
     }
 ];
 

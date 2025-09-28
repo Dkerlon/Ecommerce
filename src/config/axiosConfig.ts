@@ -9,13 +9,16 @@ const axiosInstance = axios.create({
   },
 });
 
-// Interceptors para logs ou tratamento de erros global
 axiosInstance.interceptors.response.use(
   function (response) {
     return response
   },
   error => {
-    console.error("Erro na requisição Axios:", error.message);
+    if (error.response && error.response.status === 401) {
+      alert("Sua sessão expirou. Faça login novamente.");
+    }else if(error.response){
+      alert('Ocorreu um erro durante a requisição, tente novamente mais tarde...')
+    }
     return Promise.reject(error);
   }
 );

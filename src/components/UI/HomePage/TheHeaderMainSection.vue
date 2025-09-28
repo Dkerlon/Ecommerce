@@ -5,7 +5,7 @@
             <p class="text-md text-[#6c727f]">Milhares de produtos das melhores marcas, com entrega rápida e segura. Compre com confiança no nosso marketplace.</p>
             <div class="flex w-full justify-between items-center mb-13 gap-5">
                 <ButtonFullFilled text="Explorar Produtos" class="w-full"></ButtonFullFilled>
-                <ButtonOutlined text="Vender no MarketPlace" @click="router.push('/sell')" class="w-full text-nowrap"></ButtonOutlined>
+                <ButtonOutlined v-if="userInfo.getTipoConta === 'vendedor'" text="Vender no MarketPlace" @click="router.push('/sell')" class="w-full text-nowrap"></ButtonOutlined>
             </div>
             <div class="header-main-info">
                 <div class="info-card">
@@ -52,10 +52,12 @@ import ButtonOutlined from '../buttons/ButtonOutlined.vue';
 import getUserInfoById from '@/services/getUserInfo/userInfoById';
 import { useAuthStore } from '@/store/auth';
 import { useRouter } from 'vue-router';
+import { useUserInfo } from '@/store/userInfo';
 
 const router = useRouter()
 const store =  useAuthStore()
 const idUser = ref(store.getlocalId)
+const userInfo = useUserInfo()
 
 onMounted(() => {
     getUserInfoById(idUser.value)

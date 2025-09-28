@@ -33,7 +33,6 @@
           </td>
           <td colspan="2">
             <div class="action-td flex items-center gap-5 justify-end">
-              <img class="w-4 hover:opacity-80" src="/img/icons/view-on.png" alt=""/>
               <img @click="openModal(produto)" class="w-4 hover:opacity-80" src="/img/icons/editar.png" alt=""/>
               <img class="w-4 hover:opacity-80" src="/img/icons/lixeira.png" alt=""/>
             </div>

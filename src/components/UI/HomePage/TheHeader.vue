@@ -2,37 +2,35 @@
     <header>
         <nav class="flex p-2 justify-between items-center">
             <RouterLink to="/">
-            <div class="flex items-center gap-4">
-                <img style="width: 35px;" src="/img/icons/loja.png" alt="">
-                <h3 class="text-2xl font-black">MarketPlace</h3>
-            </div>
-            </RouterLink>
-            <InputSearch v-model="search" place-holder="Buscar Produtos..."></InputSearch>
-            <div class="icons relative">
-              <img src="/img/icons/favorite.png" alt="">
-
-              <div class="relative inline-block">
-                <img
-                  @click="router.push('/cart')"
-                  src="/img/icons/cart.png"
-                  alt="carrinho ícone"
-                  class="cursor-pointer"
-                />
-                <span
-                  v-if="numeroItensCarrinho > 0"
-                  class="absolute -top-2 -right-4 bg-red-600 text-white text-xs font-bold rounded-full min-w-[20px] h-[20px] flex items-center justify-center"
-                >
-                  {{ numeroItensCarrinho }}
-                </span>
+              <div class="flex items-center gap-4">
+                  <img style="width: 35px;" src="/img/icons/loja.png" alt="">
+                  <h3 class="text-2xl font-black">MarketPlace</h3>
               </div>
-            </div>
-            <div class="actions">
-                <div class="actions">
-                    <ButtonOutlined text="Entrar" v-if="!logged" @click="signSingUp('login')"></ButtonOutlined>
-                    <ButtonOutlined text="Details" v-else></ButtonOutlined>
-                    <ButtonFullFilled text="Registrar-se" v-if="!logged" @click="signSingUp('register')"></ButtonFullFilled>
-                    <ButtonFullFilled text="Logout" @click="logout" v-else></ButtonFullFilled>
+            </RouterLink>
+            <div class="flex gap-10 items-center">
+              <div class="icons relative">
+                <div class="relative inline-block">
+                  <img
+                    @click="router.push('/cart')"
+                    src="/img/icons/cart.png"
+                    alt="carrinho ícone"
+                    class="cursor-pointer"
+                  />
+                  <span
+                    v-if="numeroItensCarrinho > 0"
+                    class="absolute -top-2 -right-4 bg-red-600 text-white text-xs font-bold rounded-full min-w-[20px] h-[20px] flex items-center justify-center"
+                  >
+                    {{ numeroItensCarrinho }}
+                  </span>
                 </div>
+              </div>
+              <div class="actions">
+                  <div class="actions">
+                      <ButtonOutlined text="Entrar" v-if="!logged" @click="signSingUp('login')"></ButtonOutlined>
+                      <ButtonFullFilled text="Registrar-se" v-if="!logged" @click="signSingUp('register')"></ButtonFullFilled>
+                      <ButtonFullFilled text="Logout" @click="logout" v-else></ButtonFullFilled>
+                  </div>
+              </div>
             </div>
         </nav>
     </header>
@@ -44,8 +42,8 @@ import { useRouter } from 'vue-router';
 import ButtonFullFilled from '../buttons/ButtonFullFilled.vue';
 import ButtonOutlined from '../buttons/ButtonOutlined.vue';
 import { computed, ref } from 'vue';
-import InputSearch from '../Inputs/InputSearch.vue';
 import { useUserInfo } from '@/store/userInfo';
+import type CreateUserResponse from '@/interfaces/CreateUserResponse';
 const store = useAuthStore()
 const storeUserInfo = useUserInfo()
 const router = useRouter()
@@ -60,7 +58,7 @@ function logout(){
         idToken : '',
         localId: ''
     }
-    store.setUser(userData)
+    store.setUser(userData as CreateUserResponse)
     localStorage.removeItem("token")
 }
 function signSingUp(url: string){

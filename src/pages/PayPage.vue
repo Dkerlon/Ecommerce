@@ -1,8 +1,6 @@
 <template>
-
   <TheHeader/>
-
-  <section class="m-auto w-[90%] flex gap-4 mt-10">
+  <section class="m-auto w-[70%] min-w-[800px] flex gap-4 mt-10 items-start">
     <MainContainer class="w-2/3 flex flex-col gap-2">
       <h3 class="font-bold text-1xl">Método de Pagamento</h3>
 
@@ -64,17 +62,20 @@
 
     </MainContainer>
 
-    <MainContainer class="w-1/3 h-60 max-h-6000">
+    <MainContainer class="w-1/3 max-h-6000">
       <h3 class="font-bold text-1xl">Resumo do Pedido</h3>
 
-      <div class="my-2">
-        <h4 class="text-xs font-semibold">Camiseta Polo Masculina</h4>
-        <span class="text-xs text-[#6c727f]">Quantidade: 1</span>
+      <div class="my-2 flex gap-2" v-for="produto in produtosForPay" :key="produto.id">
+        <img class="w-[50px] h-[50px]" :src="produto.fotos[0]" alt="Imagem do Produto">
+        <div>
+          <h4 class="text-xs font-semibold"> {{ produto.nome }} </h4>
+          <span class="text-xs text-[#6c727f]">Quantidade: {{ produto.quantidade }}</span>
+        </div>
       </div>
       <div>
         <div class="flex items-center justify-between my-2">
           <span class="text-sm">Subtotal</span>
-          <span class="text-sm font-semibold">R$ 89,99</span>
+          <span class="text-sm font-semibold">R$ {{ subtotal.toFixed(2) }}</span>
         </div>
         <div class="flex items-center justify-between my-2">
           <span class="text-sm">Frete</span>
@@ -82,10 +83,10 @@
         </div>
         <div class="flex items-center justify-between my-2">
           <span class="text-sm">Total</span>
-          <span class="text-sm font-semibold">R$ 89,99</span>
+          <span class="text-sm font-semibold">R$ {{ subtotal.toFixed(2) }}</span>
         </div>
 
-        <ButtonFullFilled class="w-full" text="Finalizar Compra"/>
+        <ButtonFullFilled @click="sendOrder" class="w-full" text="Finalizar Compra"/>
       </div>
     </MainContainer>
   </section>
@@ -96,13 +97,78 @@ import ButtonFullFilled from '@/components/UI/buttons/ButtonFullFilled.vue';
 import MainContainer from '@/components/UI/Container/MainContainer.vue';
 import TheHeader from '@/components/UI/HomePage/TheHeader.vue';
 import InputText from '@/components/UI/Inputs/InputText.vue';
-import { reactive, ref } from 'vue';
+import { MeusProdutosService, type Produto } from '@/services/MeusProdutosService';
+import OrderService, { type orderRequest } from '@/services/OrderService';
+import { useAuthStore } from '@/store/auth';
+import useCarrinhoStore from '@/store/Carrinho';
+import { computed, onMounted, reactive, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
+const store = useCarrinhoStore()
+const idComprador = useAuthStore().getlocalId
+const router = useRouter()
+const meusProdutos = new MeusProdutosService()
 const metodoDePagamento = ref('cartao');
 const dadosDoCartao = reactive({
   numero: '',
   nome: '',
   validade: '',
   cvv:''
+})
+const produtosForPay = ref<Produto[]>([])
+const isLoading = ref(true)
+
+const subtotal = computed(() => {
+  return produtosForPay.value.reduce((total, produto) => {
+    return total + (produto.preco.atual * (produto.quantidade ?? 1));
+  }, 0);
+})
+async function getProductsForPay(){
+  try{
+    isLoading.value = true
+    const response = await meusProdutos.getAllProdutos()
+    const produtosSelecionados = store.carrinhoItensSelecionados
+    const idsSelecionados = store.carrinhoItensSelecionados.map(([id]) => id)
+    produtosForPay.value = response
+    .filter(p => idsSelecionados.includes(p.id))
+    .map(p => {
+      const encontrado = produtosSelecionados.find(([id]) => id === p.id)
+      const quantidade = encontrado ? encontrado[1] : 1
+      return {
+        ...p,
+        quantidade: quantidade
+      }
+    })
+  }catch(error){
+    console.log('Erro ao encontrar os produtos', error)
+  }finally{
+    isLoading.value = false
+  }
+}
+
+async function sendOrder() {
+  const statusEnvio = ['confirmado','enviado','entregue']
+  const order : orderRequest = {
+    produtos: store.carrinhoItensSelecionados.map(([id]) => id),
+    metodoPagamento: metodoDePagamento.value,
+    data: String(Date.now()),
+    codigoRastreio: 'BR' + (Math.random()*10000 + 10000).toFixed(0),
+    statusEnvio: statusEnvio[Math.random()*2],
+    idComprador: idComprador
+  }
+  try{
+    const response = OrderService.createNewOrder(order)
+    console.log(response)
+
+    store.limparItensSelecionados()
+    setTimeout(() => {
+      router.push('/')
+    }, 2000);
+  }catch(error){
+    console.log('Erro ao enviar o pedido', error)
+  }
+}
+onMounted(() => {
+  getProductsForPay()
 })
 </script>

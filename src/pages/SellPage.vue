@@ -9,24 +9,16 @@
 
     <Tabs
     :tabs="[
-      { label: 'Visão Geral', value: 'visao-geral' },
       { label: 'Meus Produtos', value: 'meus-produtos' },
       { label: 'Adicionar Produto', value: 'adicionar-produto' },
-      { label: 'Vendas', value: 'Vendas' }
     ]"
-    defaultValue="visao-geral"
+    defaultValue="meus-produtos"
   >
-    <template #visao-geral>
-      <TabVisaoGerao/>
-    </template>
     <template #meus-produtos>
       <TabMeusProdutos/>
     </template>
     <template #adicionar-produto>
       <TabAdicionarProduto/>
-    </template>
-    <template #Vendas>
-      <TabVendas/>
     </template>
   </Tabs>
   </main>
@@ -35,8 +27,6 @@
 <script setup lang=ts>
 import TheHeader from '@/components/UI/HomePage/TheHeader.vue';
 import Tabs from '@/components/SellPage/Tabs.vue';
-import TabVisaoGerao from '@/components/SellPage/TabVisaoGerao.vue';
 import TabMeusProdutos from '@/components/SellPage/TabMeusProdutos.vue';
 import TabAdicionarProduto from '@/components/SellPage/TabAdicionarProduto.vue';
-import TabVendas from '@/components/SellPage/TabVendas.vue';
 </script>
