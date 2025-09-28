@@ -3,6 +3,7 @@
 ## 🚀 Tecnologias utilizadas
 
 * **Vue.js** – Framework principal para construção da interface.
+* **TypeScript** – Para tipagem de todo o projeto.
 * **Pinia** – Gerenciamento de estado global.
 * **Vue Router** – Controle das rotas e navegação.
 * **Tailwind CSS** – Estilização com utilitários CSS.
