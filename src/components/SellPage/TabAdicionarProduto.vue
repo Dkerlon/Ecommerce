@@ -98,6 +98,7 @@ import ButtonOutlined from '../UI/buttons/ButtonOutlined.vue';
 import ButtonFullFilled from '../UI/buttons/ButtonFullFilled.vue';
 import { ProdutoHttpService, type Produto } from '@/services/AdicionarProdutoService';
 import { useAuthStore } from '@/store/auth';
+import TheLoader from '../UI/TheLoader.vue';
 
 const store = useAuthStore();
 const produtoService = new ProdutoHttpService();

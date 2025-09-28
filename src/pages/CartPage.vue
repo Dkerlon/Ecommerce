@@ -9,6 +9,10 @@
       </RouterLink>
     </nav>
 
+  <TheLoader v-if="isLoading && !hasError"/>
+  <div v-else-if="!isLoading && hasError" class="!w-full items-center justify-center">
+    <p class="text-red-500 text-center">Ocorreu um erro, tente novamente mais tarde</p>
+  </div>
     <!-- Carrinho preenchido -->
     <MainContainer
       v-if="!isLoading && carrinhoItens.length > 0"
@@ -51,7 +55,7 @@
 
           <div class="flex justify-between">
             <span class="text-sm text-[#6c727f]">Frete</span>
-            <span class="font-bold">R$ {{ frete }}</span>
+            <span class="font-bold text-green-500 text-xs">Grátis</span>
           </div>
 
           <div class="flex justify-between">
@@ -116,6 +120,7 @@ import { useAuthStore } from '@/store/auth'
 import { carrinhoService } from '@/services/Carrinho'
 import useCarrinhoStore from '@/store/Carrinho'
 import type { userInfo } from '@/interfaces/User'
+import TheLoader from '@/components/UI/TheLoader.vue'
 
 const produtosService = new MeusProdutosService()
 const store = useAuthStore()
@@ -123,6 +128,7 @@ const carrinhoStore = useCarrinhoStore()
 
 const carrinhoItens = ref<Produto[]>([])
 const isLoading = ref(true)
+const hasError = ref(false)
 
 const subTotal = computed(() => {
   return carrinhoItens.value.reduce((total, item) => {
@@ -136,8 +142,7 @@ const subTotal = computed(() => {
   }, 0)
 })
 
-const frete = +(Math.random() * 100).toFixed(2)
-const total = computed(() => frete + subTotal.value)
+const total = computed(() => subTotal.value)
 
 
 function isSelecionado(id: string) {
@@ -146,9 +151,12 @@ function isSelecionado(id: string) {
 
 async function getProdutosCarrinho() {
   try {
-    isLoading.value = true
     const response = (await getUserInfoById(store.localId)) as userInfo
 
+    if(!response.carrinho){
+      return
+    }
+    
     const productsID = Object.keys(response.carrinho)
     let produtos = await produtosService.getAllProdutos()
 
@@ -161,6 +169,7 @@ async function getProdutosCarrinho() {
 
     carrinhoItens.value = produtos
   } catch (error) {
+    hasError.value = true
     console.error('Erro ao carregar carrinho:', error)
   } finally {
     isLoading.value = false

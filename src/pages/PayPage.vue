@@ -14,15 +14,15 @@
       </MainContainer>
       <MainContainer class="flex items-center gap-3">
         <input type="radio" v-model="metodoDePagamento" value="cartao" name="metodoPagamento">
-        <img src="/img/icons/credit-card.svg" alt="ícone de qr-code">
+        <img src="/img/icons/credit-card.svg" alt="ícone de cartão">
         <div>
           <span class="font-bold text-sm">Cartão de Crédito</span>
           <p class="text-xs text-[#6c727f]">Visa, Mastercard, Elo</p>
         </div>
       </MainContainer>
       <MainContainer class="flex items-center gap-3">
-        <input type="radio" v-model="metodoDePagamento" value="paypal" name="metodoPagamento">
-        <img src="/img/icons/paypal.svg" alt="ícone de qr-code">
+        <input type="radio" v-model="metodoDePagamento" value="cartao" name="metodoPagamento">
+        <img src="/img/icons/paypal.svg" alt="ícone de cartão paypal">
         <div>
           <span class="font-bold text-sm">Paypal</span>
           <p class="text-xs text-[#6c727f]">Conta Paypal</p>
@@ -147,6 +147,10 @@ async function getProductsForPay(){
 }
 
 async function sendOrder() {
+  if(metodoDePagamento.value === 'cartao' && (!dadosDoCartao.cvv || !dadosDoCartao.nome || !dadosDoCartao.numero || !dadosDoCartao.validade)){
+    alert('Preencha os campos do cartão')
+    return
+  }
   const statusEnvio = ['confirmado','enviado','entregue']
   const order : orderRequest = {
     produtos: store.carrinhoItensSelecionados.map(([id]) => id),

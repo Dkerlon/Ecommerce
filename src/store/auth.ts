@@ -19,11 +19,13 @@ export const useAuthStore = defineStore("auth", {
     },
   },
   actions:{
-    setUser(user: CreateUserResponse) {
+    setUser(user: CreateUserResponse, remeber: boolean) {
       this.idToken = user.idToken
       this.localId = user.localId
-      localStorage.setItem("token", this.idToken)
-      localStorage.setItem("localId", this.localId)
+      if(remeber){
+        localStorage.setItem("token", this.idToken)
+        localStorage.setItem("localId", this.localId)
+      }
     },
     clearUser(){
       this.idToken = ''

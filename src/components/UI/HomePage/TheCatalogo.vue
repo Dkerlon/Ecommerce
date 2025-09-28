@@ -68,9 +68,13 @@
             :key="produto.id || produto.nome"
             :produto="produto"
           />
-          <div v-if="produtosFiltrados.length === 0" class="py-10 text-red-500">
-            <p>Nenhum produto encontrado...</p>
+          <TheLoader v-if="isLoading && !hasError"/>
+          <div v-if="!isLoading && hasError" class="w-full items-center justify-center">
+            <p class="text-red-500 text-center">Ocorreu um erro, tente novamente mais tarde</p>
           </div>
+        </div>
+        <div v-if="produtosFiltrados.length === 0 && !isLoading" class="py-10 text-red-500">
+          <p>Nenhum produto encontrado...</p>
         </div>
       </div>
     </section>
@@ -85,6 +89,7 @@ import TheSlider from '../Inputs/TheSlider.vue';
 import ProdutoCard from '@/components/Produto/ProdutoCard.vue';
 import { MeusProdutosService, type Produto } from '@/services/MeusProdutosService';
 import type { AvaliacaoPayload } from '@/services/AvaliacaoService';
+import TheLoader from '../TheLoader.vue';
 
 const MeusProdutosServiceInstance = new MeusProdutosService();
 
@@ -106,7 +111,8 @@ const searchTerm = ref('');
 const categoriasSelecionadas = ref<string[]>([]);
 const avaliacaoSelecionada = ref<number[]>([]);
 const apenasEstoque = ref(false);
-
+const isLoading = ref(true)
+const hasError = ref(false)
 const produtos = ref<Produto[]>([]);
 
 function computeAverageRating(avaliacoes?: Record<string, AvaliacaoPayload>): number {
@@ -117,16 +123,6 @@ function computeAverageRating(avaliacoes?: Record<string, AvaliacaoPayload>): nu
   const soma = values.reduce((acc, v) => acc + v.avaliacao, 0)
   return soma / values.length
 }
-
-
-onMounted(async () => {
-  produtos.value = await MeusProdutosServiceInstance.getAllProdutos();
-  const raw = await MeusProdutosServiceInstance.getAllProdutos()
-  produtos.value = raw.map(p => ({
-    ...p,
-    avgRating: computeAverageRating(p.avaliacoes)
-  }))
-});
 
 const produtosFiltrados = computed(() => {
   return produtos.value.filter(p => {
@@ -154,6 +150,23 @@ const produtosFiltrados = computed(() => {
     return true;
   });
 });
+
+onMounted(async () => {
+  try{
+    produtos.value = await MeusProdutosServiceInstance.getAllProdutos();
+    const raw = await MeusProdutosServiceInstance.getAllProdutos()
+    produtos.value = raw.map(p => ({
+      ...p,
+      avgRating: computeAverageRating(p.avaliacoes)
+    }))
+  }catch(error){
+    console.log('Erro ao buscar produtos', error)
+    hasError.value = true
+  }finally{
+    isLoading.value = false
+  }
+});
+
 </script>
 
 

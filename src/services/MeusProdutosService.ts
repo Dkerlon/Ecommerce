@@ -84,4 +84,13 @@ export class MeusProdutosService {
       throw error;
     }
   }
+
+  async removerProduto(id: string){
+    try{
+      await axiosInstance.delete(`/users/${this.userId}/visaoGeral/produtos/${id}.json?auth=${this.userToken}`)
+    }catch (error){
+      console.error("Erro ao editar produto:", error);
+      throw error;
+    }
+  }
 }

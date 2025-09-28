@@ -41,7 +41,7 @@ import { useAuthStore } from '@/store/auth';
 import { useRouter } from 'vue-router';
 import ButtonFullFilled from '../buttons/ButtonFullFilled.vue';
 import ButtonOutlined from '../buttons/ButtonOutlined.vue';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { useUserInfo } from '@/store/userInfo';
 import type CreateUserResponse from '@/interfaces/CreateUserResponse';
 const store = useAuthStore()
@@ -51,14 +51,13 @@ const numeroItensCarrinho = computed(() => storeUserInfo.getCarrinho.length)
 const logged = computed(() => {
     return store.isLoggedIn
 })
-const search = ref('')
 
 function logout(){
     const userData = {
         idToken : '',
         localId: ''
     }
-    store.setUser(userData as CreateUserResponse)
+    store.setUser(userData as CreateUserResponse, false)
     localStorage.removeItem("token")
 }
 function signSingUp(url: string){

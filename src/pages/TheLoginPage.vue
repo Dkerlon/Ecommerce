@@ -14,11 +14,10 @@
               <label for="password">Senha</label>
               <div class="container-input-img">
                 <input type="password" name="password" id="password" placeholder="Digite uma senha segura" v-model="password"/>
-                <img src="/img/icons/view-on.png" alt="">
               </div>
               <p v-if="formSubmitted && !isFormValid" class="formInvalid">Por favor insira as informações corretamente</p>
               <div class="lembrar-de-mim">
-                <input type="checkbox" name="accept-checkbox" id="accept-checkbox">
+                <input type="checkbox" name="accept-checkbox" id="accept-checkbox" v-model="remember">
                 <p>Lembrar de mim</p>
               </div>
               <button type="submit">Entrar</button>
@@ -48,6 +47,7 @@ const isFormValid = computed(() => {
     password.value.trim() !== ''
   )
 })
+const remember = ref(false)
 const isLogged = computed<string>(() => store.isLoggedIn!)
 watch(isLogged, () => {
   if(isLogged.value){
@@ -72,8 +72,7 @@ async function LoginAccount() {
     const response = await signIn(userData) as CreateUserResponse
 
     if (response && response.idToken) {
-      store.setUser(response)
-
+      store.setUser(response,remember.value)
       router.push('/')
     } else {
       alert("Falha no login. Verifique suas credenciais e tente novamente.")

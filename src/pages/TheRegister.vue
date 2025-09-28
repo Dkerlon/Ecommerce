@@ -16,20 +16,18 @@
               <label for="password">Senha</label>
               <div class="container-input-img">
                 <input type="password" name="password" id="password" placeholder="Digite uma senha segura" v-model="password"/>
-                <img src="/img/icons/view-on.png" alt="">
               </div>
               <p v-if="formSubmitted && !passwordIsEqual" class="formInvalid">As senhas devem ser iguais.</p>
               <label for="confirm-password">Confirmar senha</label>
               <div class="container-input-img">
                 <input type="confirm-password" name="confirm-password" id="confirm-password" placeholder="Confirme a senha" v-model="confirmPassword"/>
-                <img src="/img/icons/view-on.png" alt="">
               </div>
               <p v-if="formSubmitted && !passwordIsEqual" class="formInvalid">As senhas devem ser iguais.</p>
               <label for="">Tipo de conta</label>
               <div class="type-accout">
                 <label class="type">
                   <input type="radio" name="type-accout" id="radio-comprador" value="comprador" v-model="typeAccount">
-                  <img src="/public//img/icons//user-icon.png" alt="">
+                  <img src="/public/img/icons//user-icon.png" alt="">
                   <span>Comprador</span>
                 </label>
                 <label class="type">

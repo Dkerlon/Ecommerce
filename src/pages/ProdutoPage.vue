@@ -84,7 +84,7 @@
         </ButtonOutlined>
       </div>
       <div>
-        <ButtonFullFilled class="bg-orange-500 w-full hover:bg-orange-600" text="Comprar Agora"/>
+        <ButtonFullFilled class="bg-orange-500 w-full hover:bg-orange-600" text="Comprar Agora" @click="selecionarDesmarcarItem(route.params.id as string, 1)"/>
       </div>
       <div class="flex flex-col gap-2 my-4">
         <div class="flex items-center gap-3 text-xs text-[#6c727f]">
@@ -103,7 +103,11 @@
 
     </div>
   </section>
-  <section class="flex flex-col gap-5 my-4 w-[90%] m-auto">
+  <TheLoader v-if="isLoading && !hasError"/>
+  <div v-else-if="!isLoading && hasError" class="!w-full items-center justify-center">
+    <p class="text-red-500">Ocorreu um erro, tente novamente mais tarde</p>
+  </div>
+  <section v-if="!isLoading && !hasError" class="flex flex-col gap-5 my-4 w-[90%] m-auto">
   <div class="flex items-center justify-between">
     <h3 class="text-lg font-bold">Avaliações dos clientes</h3>
     <ButtonFullFilled v-if="store.localId" @click="showModal = true" text="Escrever avaliação"/>
@@ -191,17 +195,22 @@ import TheCard from '@/components/UI/Container/TheCard.vue';
 import { computed, onMounted, reactive, ref } from 'vue';
 import ModalAvaliacao from '@/components/UI/Modais/ModalAvaliacao.vue';
 import { useAuthStore } from '@/store/auth';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { AvaliacaoService, type AvaliacaoPayload } from '@/services/AvaliacaoService';
 import { carrinhoService } from '@/services/Carrinho';
-import { useUserInfo } from '@/store/userInfo';
+import TheLoader from '@/components/UI/TheLoader.vue';
+import useCarrinhoStore from '@/store/Carrinho';
+
 const store = useAuthStore()
+const carrinhoStore = useCarrinhoStore()
 const route = useRoute()
+const router = useRouter()
 const produtoService = new MeusProdutosService
 let produto = reactive<Produto>({} as Produto)
 const quantidade = ref(1)
 let vendedorInfo = reactive<userInfo>({} as userInfo)
 const isLoading = ref(true)
+const hasError = ref(false)
 const avaliacoesObj = ref<Record<string, AvaliacaoPayload>>({});
 const avaliacoesArray = computed<AvaliacaoPayload[]>(() =>
   Object.values(avaliacoesObj.value || {})
@@ -215,7 +224,6 @@ const ratingT = computed(() => {
 const showModal = ref(false);
 async function getProduto(){
   try{
-    isLoading.value = true
     const response = await produtoService.getProdutoById(String(route.params.id))
     produto = response
   }catch(error){
@@ -249,6 +257,22 @@ function addToCart(id: string) {
   carrinhoService.adicionarAoCarrinho(id, quantidade.value);
 }
 
+function selecionarDesmarcarItem(id: string, quantidade: number) {
+  addToCart(route.params.id as string)
+  const existe = carrinhoStore.carrinhoItensSelecionados.find(
+    ([itemId]) => itemId === id
+  )
+
+  if (existe) {
+    carrinhoStore.removerItemSelecionado(id)
+  } else {
+    carrinhoStore.adicionarItemSelecionado(id, quantidade)
+  }
+
+  console.log('Itens selecionados:', carrinhoStore.carrinhoItensSelecionados)
+  router.push('/payPage')
+}
+
 onMounted( async () => {
   try{
     isLoading.value = true
@@ -257,6 +281,7 @@ onMounted( async () => {
     await getProdutoAvaliacoes()
   }catch{
     console.log('Error')
+    hasError.value = true
   }finally{
     isLoading.value = false
   }
